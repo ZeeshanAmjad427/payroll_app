@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:payroll/presentation/screens/attendance_log_screen/widgets/attendance_card/attendance_card_component.dart';
 import 'package:payroll/presentation/screens/home_screen/home_screen_ui/widgets/top_left_gradient_color.dart';
-import 'package:intl/intl.dart';
 
 import '../home_screen/home_screen_ui/home_screen_ui.dart';
 import '../profile_screen/profile_screen_ui.dart';
@@ -33,95 +33,49 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
   ];
 
   String _selectedMonth = 'May 2025';
-
-  List<DateTime> weekDates = [];
-
-  /// Stores the Monday date of the current shown week
-  late DateTime _currentMonday;
+  late List<List<DateTime>> _monthWeeks;
+  int _currentWeekIndex = 0;
 
   @override
   void initState() {
     super.initState();
-    _initializeCurrentMonday();
-    _updateWeekDates();
+    _initializeMonthWeeks();
   }
 
-  void _initializeCurrentMonday() {
-    DateTime selectedMonthDate = DateFormat('MMMM yyyy').parse(_selectedMonth);
-    DateTime today = DateTime.now();
+  void _initializeMonthWeeks() {
+    final selectedDate = DateFormat('MMMM yyyy').parse(_selectedMonth);
+    final firstDay = DateTime(selectedDate.year, selectedDate.month, 1);
+    final lastDay = DateTime(selectedDate.year, selectedDate.month + 1, 0);
 
-    if (today.year == selectedMonthDate.year && today.month == selectedMonthDate.month) {
-      _currentMonday = today.subtract(Duration(days: today.weekday - DateTime.monday));
-    } else {
-      DateTime firstOfMonth = DateTime(selectedMonthDate.year, selectedMonthDate.month, 1);
-      int offset = DateTime.monday - firstOfMonth.weekday;
-      if (offset < 0) offset += 7;
-      _currentMonday = firstOfMonth.add(Duration(days: offset));
+    _monthWeeks = [];
+    List<DateTime> currentWeek = [];
+
+    for (DateTime date = firstDay; !date.isAfter(lastDay); date = date.add(const Duration(days: 1))) {
+      currentWeek.add(date);
+      if (currentWeek.length == 7 || date == lastDay) {
+        _monthWeeks.add(List.from(currentWeek));
+        currentWeek.clear();
+      }
     }
+
+    _currentWeekIndex = 0;
   }
 
-  void _updateWeekDates() {
-    weekDates.clear();
-    for (int i = 0; i < 7; i++) {
-      weekDates.add(_currentMonday.add(Duration(days: i)));
-    }
-  }
-
-  int getCurrentWeekOfMonth(DateTime date) {
-    final firstDayOfMonth = DateTime(date.year, date.month, 1);
-    final offset = firstDayOfMonth.weekday - 1;
-    return ((date.day + offset - 1) ~/ 7) + 1;
-  }
-
-  int getTotalWeeksInMonth(DateTime date) {
-    final firstDayOfMonth = DateTime(date.year, date.month, 1);
-    final lastDayOfMonth = DateTime(date.year, date.month + 1, 0);
-    final firstWeekday = firstDayOfMonth.weekday;
-    final totalDays = lastDayOfMonth.day;
-    final totalWeeks = ((totalDays + (firstWeekday - 1)) / 7).ceil();
-    return totalWeeks;
-  }
-
-  String getWeekText(int weekNumber) {
-    switch (weekNumber) {
-      case 1:
-        return "First Week";
-      case 2:
-        return "Second Week";
-      case 3:
-        return "Third Week";
-      case 4:
-        return "Fourth Week";
-      default:
-        return "${weekNumber}th Week";
-    }
-  }
+  List<DateTime> get weekDates => _monthWeeks[_currentWeekIndex];
 
   void _onPrevWeek() {
     setState(() {
-      _currentMonday = _currentMonday.subtract(const Duration(days: 7));
-      DateTime selectedMonthDate = DateFormat('MMMM yyyy').parse(_selectedMonth);
-      if (_currentMonday.month < selectedMonthDate.month || _currentMonday.year < selectedMonthDate.year) {
-        DateTime firstOfMonth = DateTime(selectedMonthDate.year, selectedMonthDate.month, 1);
-        int offset = DateTime.monday - firstOfMonth.weekday;
-        if (offset < 0) offset += 7;
-        _currentMonday = firstOfMonth.add(Duration(days: offset));
+      if (_currentWeekIndex > 0) {
+        _currentWeekIndex--;
       }
-      _updateWeekDates();
     });
   }
 
   void _onNextWeek() {
     setState(() {
-      _currentMonday = _currentMonday.add(const Duration(days: 7));
-      DateTime selectedMonthDate = DateFormat('MMMM yyyy').parse(_selectedMonth);
-      final lastDayOfMonth = DateTime(selectedMonthDate.year, selectedMonthDate.month + 1, 0);
-      if (_currentMonday.month > selectedMonthDate.month || _currentMonday.year > selectedMonthDate.year) {
-        int offset = lastDayOfMonth.weekday - DateTime.monday;
-        if (offset < 0) offset += 7;
-        _currentMonday = lastDayOfMonth.subtract(Duration(days: offset));
+      if (_currentWeekIndex < _monthWeeks.length - 1) {
+        _currentWeekIndex++;
       }
-      _updateWeekDates();
     });
   }
 
@@ -129,9 +83,20 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
     if (newMonth == null) return;
     setState(() {
       _selectedMonth = newMonth;
-      _initializeCurrentMonday();
-      _updateWeekDates();
+      _initializeMonthWeeks();
     });
+  }
+
+  String getWeekText(int index) {
+    const weekNames = [
+      "First Week",
+      "Second Week",
+      "Third Week",
+      "Fourth Week",
+      "Fifth Week",
+      "Sixth Week"
+    ];
+    return index < weekNames.length ? weekNames[index] : "${index + 1}th Week";
   }
 
   void _onItemTapped(int index) {
@@ -157,11 +122,8 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
 
   @override
   Widget build(BuildContext context) {
-    DateTime selectedMonthDate = DateFormat('MMMM yyyy').parse(_selectedMonth);
-    int totalWeeksInMonth = getTotalWeeksInMonth(selectedMonthDate);
-    int currentWeekNumber = getCurrentWeekOfMonth(_currentMonday);
-    String weekText = getWeekText(currentWeekNumber);
-    String weekInfoText = 'Week $currentWeekNumber of $totalWeeksInMonth';
+    String weekText = getWeekText(_currentWeekIndex);
+    String weekInfoText = 'Week ${_currentWeekIndex + 1} of ${_monthWeeks.length}';
 
     return Scaffold(
       body: Stack(
@@ -184,8 +146,8 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                       Navigator.pop(context);
                     },
                   ),
-                  Expanded(
-                    child: const Center(
+                  const Expanded(
+                    child: Center(
                       child: Text(
                         'My Attendance',
                         style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
@@ -213,7 +175,7 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Row with "Attendance Log", week text below it, and dropdown at right
+                    // Header row
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -272,16 +234,12 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    const Divider(
-                      color: Colors.grey,
-                      thickness: 1,
-                    ),
+                    const Divider(color: Colors.grey, thickness: 1),
                     const SizedBox(height: 10),
 
-                    // Show attendance cards
+                    // Attendance cards for the week
                     for (var date in weekDates)
                       if (date.weekday == DateTime.saturday || date.weekday == DateTime.sunday)
-                      // Weekend card with status "Weekend" and 00:00 times
                         AttendanceCardComponent(
                           date: date,
                           status: "Weekend",
@@ -292,7 +250,6 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                           totalHours: "00:00",
                         )
                       else
-                      // Weekday card as normal
                         AttendanceCardComponent(date: date),
 
                     Padding(
@@ -345,10 +302,7 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    const Divider(
-                      color: Colors.grey,
-                      thickness: 1,
-                    ),
+                    const Divider(color: Colors.grey, thickness: 1),
                   ],
                 ),
               ),

@@ -1,14 +1,20 @@
-import 'dart:async';
-import '../../../domain/repositories/auth_repository.dart';
+
+import '../../domain/repositories/auth_repository.dart';
+import '../datasources/auth/LoginRemoteDataSource.dart';
+import '../models/auth_model/login_request_model.dart';
+import '../models/auth_model/login_response_model.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  @override
-  Future<void> login({required String email, required String password}) async {
-    await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
+  final LoginRemoteDataSource remoteDataSource;
 
-    // Simulated check
-    if (email != '123' || password != '123') {
-      throw Exception('Invalid email or password');
-    }
+  AuthRepositoryImpl(this.remoteDataSource);
+
+  @override
+  Future<LoginResponseModel> login({
+    required String email,
+    required String password,
+  }) async {
+    final requestModel = LoginRequestModel(email: email, password: password);
+    return await remoteDataSource.login(requestModel);
   }
 }
