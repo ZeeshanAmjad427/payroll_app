@@ -5,6 +5,7 @@ import 'package:payroll/presentation/screens/login_screen/login_screen_ui/widget
 import 'package:payroll/presentation/screens/login_screen/login_screen_ui/widgets/password_input_field.dart';
 import 'package:payroll/presentation/screens/login_screen/login_screen_ui/widgets/login_button.dart';
 import 'package:payroll/core/utils/corner_gradient_painter.dart';
+import 'package:payroll/presentation/screens/otp_screen/otp_screen_ui.dart';
 
 import '../login_bloc/login_bloc.dart';
 import '../login_bloc/login_event.dart';
@@ -59,7 +60,7 @@ class _LoginScreenUiState extends State<LoginScreenUi> {
                     } else if (state.loginStatus == LoginStatus.success) {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (_) => const HomeScreenUi()),
+                        MaterialPageRoute(builder: (_) => const OtpScreenUi()),
                       );
                     }
                   },

@@ -32,6 +32,7 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
   DateTime _now = DateTime.now();
   String _attendanceStatus = '';
   int _selectedIndex = 0;
+  bool _isWorkFromHome = false;
 
   @override
   void initState() {
@@ -197,7 +198,7 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                       children: [
                         Expanded(
                           child: InfoContainer(
-                            icon: const Icon(CupertinoIcons.square_arrow_right, size: 22, color: Color(0xff008B8B)),
+                            icon: Image.asset('assets/check_in.png'),
                             title: 'Check In',
                             data: _checkInTime != null
                                 ? DateFormat('hh:mm:ss a').format(_checkInTime!)
@@ -207,7 +208,7 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                         ),
                         Expanded(
                           child: InfoContainer(
-                            icon: const Icon(CupertinoIcons.square_arrow_left, size: 22, color: Color(0xff008B8B)),
+                            icon: Image.asset('assets/check_out.png'),
                             title: 'Check Out',
                             data: _checkOutTime != null
                                 ? DateFormat('hh:mm:ss a').format(_checkOutTime!)
@@ -222,7 +223,7 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                       children: [
                         Expanded(
                           child: InfoContainer(
-                            icon: const Icon(CupertinoIcons.home, size: 22, color: Color(0xff008B8B)),
+                            icon: const Icon(Icons.directions_run_sharp, size: 22, color: Color(0xff008B8B)),
                             title: 'Total Lates',
                             data: '02',
                             text: 'Late Check In',
@@ -311,39 +312,103 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    SlideAction(
-                      enabled: !_isFetchingAddress &&
-                          // _isLocationValid &&
-                          !(_checkInTime != null && _checkOutTime != null),
-                      outerColor: _isCheckedIn ? Colors.red : const Color(0xff008B8B),
-                      innerColor: Colors.white,
-                      elevation: 4,
-                      borderRadius: 12,
-                      text: _isCheckedIn ? 'Swipe to Check Out' : 'Swipe to Check In',
-                      textStyle: const TextStyle(
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
                         color: Colors.white,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.4),
+                            offset: const Offset(0, 2),
+                            blurRadius: 6,
+                          ),
+                        ],
                       ),
-                      sliderButtonIcon: Icon(
-                        _isCheckedIn ? Icons.horizontal_distribute_rounded : Icons.horizontal_distribute_rounded,
-                        color: _isCheckedIn ? Colors.red : const Color(0xff008B8B),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Checkbox(
+                                  activeColor: const Color(0xff008B8B),
+                                  side: BorderSide(color: Colors.grey.withOpacity(0.5)),
+                                  value: _isWorkFromHome,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      _isWorkFromHome = value ?? false;
+                                    });
+                                  },
+                                ),
+                                const Text(
+                                  'Work From Home?',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const Spacer(),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Container(
+                                    height: 25,
+                                    width: 25,
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      color: const Color(0xff008B8B).withOpacity(0.2),
+                                    ),
+                                    child: Image.asset('assets/home.png'),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Divider(
+                              color: Colors.grey.withOpacity(0.2),
+                              thickness: 1,
+                            ),
+                            const SizedBox(height: 10),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                              child: SlideAction(
+                                enabled: !_isFetchingAddress &&
+                                    !(_checkInTime != null && _checkOutTime != null),
+                                outerColor: _isCheckedIn ? Colors.red : const Color(0xff008B8B),
+                                innerColor: Colors.white,
+                                elevation: 2,
+                                borderRadius: 6,
+                                height: 62, // Ensure it matches your design
+                                sliderButtonIcon: Icon(
+                                  Icons.horizontal_distribute_rounded,
+                                  color: _isCheckedIn ? Colors.red : const Color(0xff008B8B),
+                                ),
+                                text: _isCheckedIn ? 'Swipe to Check Out' : 'Swipe to Check In',
+                                textStyle: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                onSubmit: () {
+                                  setState(() {
+                                    if (!_isCheckedIn) {
+                                      _checkInTime = _now;
+                                      _attendanceStatus = _getCheckInStatus(_now);
+                                      _isCheckedIn = true;
+                                    } else {
+                                      _checkOutTime = _now;
+                                      _isCheckedIn = false;
+                                    }
+                                  });
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                        ),
                       ),
-                      onSubmit: () {
-                        if (!_isCheckedIn) {
-                          setState(() {
-                            _checkInTime = _now;
-                            _attendanceStatus = _getCheckInStatus(_now);
-                            _isCheckedIn = true;
-                          });
-                        } else {
-                          setState(() {
-                            _checkOutTime = _now;
-                            _isCheckedIn = false;
-                          });
-                        }
-                      },
                     ),
+
                   ],
                 ),
               ),
@@ -367,10 +432,40 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
         selectedIconTheme: const IconThemeData(color: Colors.white),
         unselectedIconTheme: const IconThemeData(color: Colors.white),
 
-        items: const [
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.calendar_today), label: 'Attendance'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.person), label: 'Profile'),
+        items: [
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              _selectedIndex == 0
+                  ? 'assets/home_selected.png'
+                  : 'assets/home_unselected.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Home',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              _selectedIndex == 1
+                  ? 'assets/calendar_selected.png'
+                  : 'assets/calendar_unselected.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Home',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              _selectedIndex == 1
+                  ? 'assets/profile_selected.png'
+                  : 'assets/profile_unselected.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Home',
+          ),
+
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
         ],
       ),

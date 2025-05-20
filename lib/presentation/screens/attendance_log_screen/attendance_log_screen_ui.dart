@@ -1,3 +1,4 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -175,7 +176,7 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Header row
+                    
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -209,24 +210,45 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                             ),
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _selectedMonth,
-                                icon: const Icon(Icons.keyboard_arrow_down, color: Colors.black),
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          child: DropdownButtonHideUnderline(
+                            child: DropdownButton2<String>(
+                              isExpanded: true,
+                              hint: const Text(
+                                'Select Month',
+                                style: TextStyle(fontSize: 14),
+                              ),
+                              items: _months.map((month) {
+                                return DropdownMenuItem<String>(
+                                  value: month,
+                                  child: Text(
+                                    month,
+                                    style: const TextStyle(
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                              value: _selectedMonth,
+                              onChanged: _onMonthChanged,
+                              buttonStyleData: const ButtonStyleData(
+                                padding: EdgeInsets.symmetric(horizontal: 0),
+                                height: 40,
+                                width: 140,
+                              ),
+                              dropdownStyleData: DropdownStyleData(
+                                maxHeight: 200, // dropdown won't fully open and will scroll
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.white,
                                 ),
-                                items: _months.map((month) {
-                                  return DropdownMenuItem<String>(
-                                    value: month,
-                                    child: Text(month),
-                                  );
-                                }).toList(),
-                                onChanged: _onMonthChanged,
+                              ),
+                              menuItemStyleData: const MenuItemStyleData(
+                                height: 40,
+                                padding: EdgeInsets.symmetric(horizontal: 12),
+                              ),
+                              iconStyleData: const IconStyleData(
+                                icon: Icon(Icons.keyboard_arrow_down, color: Colors.black),
                               ),
                             ),
                           ),
@@ -234,7 +256,7 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                       ],
                     ),
                     const SizedBox(height: 10),
-                    const Divider(color: Colors.grey, thickness: 1),
+                     Divider(color: Colors.grey.withOpacity(0.3), thickness: 1),
                     const SizedBox(height: 10),
 
                     // Attendance cards for the week
@@ -285,7 +307,7 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                               ElevatedButton(
                                 onPressed: _onNextWeek,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.grey.shade200,
+                                  backgroundColor: Colors.white,
                                   padding: const EdgeInsets.symmetric(horizontal: 12),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(8),
@@ -301,8 +323,6 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    const Divider(color: Colors.grey, thickness: 1),
                   ],
                 ),
               ),
@@ -316,16 +336,50 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
         onTap: _onItemTapped,
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
+
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white,
+
         selectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 10),
         unselectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 10),
+
         selectedIconTheme: const IconThemeData(color: Colors.white),
         unselectedIconTheme: const IconThemeData(color: Colors.white),
-        items: const [
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.calendar_today), label: 'Attendance'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.person), label: 'Profile'),
+
+        items: [
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              _selectedIndex == 0
+                  ? 'assets/home_selected.png'
+                  : 'assets/home_unselected.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Home',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              _selectedIndex == 1
+                  ? 'assets/calendar_selected.png'
+                  : 'assets/calendar_unselected.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Home',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              _selectedIndex == 0
+                  ? 'assets/profile_selected.png'
+                  : 'assets/profile_unselected.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Home',
+          ),
+
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
         ],
       ),

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class InfoContainer extends StatelessWidget {
-  final Icon icon;
+  final Widget icon;
   final String title;
   final String data;
   final String text;

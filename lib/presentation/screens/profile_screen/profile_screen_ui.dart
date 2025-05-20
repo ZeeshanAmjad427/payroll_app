@@ -27,6 +27,7 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
   final TextEditingController managerController = TextEditingController();
   final TextEditingController employmentTypeController = TextEditingController();
   final TextEditingController joiningDateController = TextEditingController();
+  bool _is2FAEnabled = false;
 
 
   int _selectedIndex = 0;
@@ -260,8 +261,160 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
                       controller: maritalStatusController,
                       hintText: '10 December 2024',
                     ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 16.0),
+                      child: Card(
+                        color: Colors.white,
+                        shadowColor: Colors.white,
+                        elevation: 4,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(
+                              height: 50,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 8.0),
+                                    child: Text(
+                                      'Enable 2FA',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 8.0),
+                                    child: CupertinoSwitch(
+                                      activeTrackColor: Color(0xff008B8B),
+                                      value: _is2FAEnabled,
+                                      onChanged: (bool value) {
+                                        setState(() {
+                                          _is2FAEnabled = value;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+
+                            if (_is2FAEnabled) ...[
+                              const SizedBox(height: 12),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: const Text(
+                                  'Scan this QR code in-app to verify a account',
+                                  style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400),
+                                ),
+                              ),
+                              const SizedBox(height: 12),
+                              Divider(color: Colors.grey.withOpacity(0.3)),
+                              const SizedBox(height: 12),
+
+                              // QR Code Placeholder
+                              Center(
+                                child: Container(
+                                  width: 150,
+                                  height: 150,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child:  Center(
+                                      child: Image.asset('assets/QR.png')
+                                  ),
+                                ),
+                              ),
+
+                              const SizedBox(height: 10),
+
+                              Row(
+                                children: [
+                                  Expanded(child: Divider(color: Colors.grey.withOpacity(0.3))),
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: Text("or enter the security key manually", style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
+                                  ),
+                                  Expanded(child: Divider(color: Colors.grey.withOpacity(0.3))),
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+
+
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(color: Colors.grey.shade300),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      const Expanded(
+                                        child: Text(
+                                          "ABCD-EFGH-IJKL",
+                                          style: TextStyle(fontSize: 14),
+                                        ),
+                                      ),
+                                      IconButton(
+                                        icon: const Icon(Icons.copy, size: 20),
+                                        onPressed: () {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(content: Text("Copied to clipboard")),
+                                          );
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 16),
+                              Container(
+                                width: double.infinity,
+                                padding: const EdgeInsets.symmetric(vertical: 12),
+                                decoration: const BoxDecoration(
+                                  color: Color(0xff008B8B),
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(12),
+                                    bottomRight: Radius.circular(12),
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(width: 8),
+                                    const Text(
+                                      'Trusted By LockKeyz',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    Image.asset(
+                                      'assets/lockKeyz.png',
+                                      height: 30,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+
+                    ),
+
                   ],
                 ),
+
               ),
             ),
           ),
@@ -283,10 +436,40 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
         selectedIconTheme: const IconThemeData(color: Colors.white),
         unselectedIconTheme: const IconThemeData(color: Colors.white),
 
-        items: const [
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.calendar_today), label: 'Attendance'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.person), label: 'Profile'),
+        items: [
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              _selectedIndex == 1
+                  ? 'assets/home_selected.png'
+                  : 'assets/home_unselected.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Home',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              _selectedIndex == 1
+                  ? 'assets/calendar_selected.png'
+                  : 'assets/calendar_unselected.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Home',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              _selectedIndex == 0
+                  ? 'assets/profile_selected.png'
+                  : 'assets/profile_unselected.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Home',
+          ),
+
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
         ],
       ),

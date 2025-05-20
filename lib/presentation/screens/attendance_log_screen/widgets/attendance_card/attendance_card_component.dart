@@ -9,6 +9,8 @@ class AttendanceCardComponent extends StatelessWidget {
   final String checkInNote;
   final String checkOutNote;
   final String totalHours;
+  final String checkInDevice;  
+  final String checkOutDevice; 
 
   const AttendanceCardComponent({
     Key? key,
@@ -19,7 +21,57 @@ class AttendanceCardComponent extends StatelessWidget {
     this.checkInNote = 'Late (+15m)',
     this.checkOutNote = 'Early (-30m)',
     this.totalHours = 'Worked: 8h 28m',
+    this.checkInDevice = 'mobile',
+    this.checkOutDevice = 'mobile',
   }) : super(key: key);
+
+  Color _statusTextColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'present':
+        return const Color(0xff1C8300); // Dark Green
+      case 'absent':
+        return const Color(0xffD10000); // Red
+      case 'weekend':
+        return const Color(0xffFF8C00); // Orange
+      case 'wfh':
+        return const Color(0xff8B4513); // Brown
+      default:
+        return Colors.black;
+    }
+  }
+
+  Color _statusBackgroundColor(String status) {
+    switch (status.toLowerCase()) {
+      case 'present':
+        return const Color(0xffE6FFE6); // Light Green
+      case 'absent':
+        return const Color(0xffFFE6E6); // Light Red
+      case 'weekend':
+        return const Color(0xffFFF3E0); // Light Orange
+      case 'wfh':
+        return const Color(0xffF5E3D8); // Light Brown
+      default:
+        return Colors.grey.shade200;
+    }
+  }
+
+  Widget _deviceIcon(String device) {
+    switch (device.toLowerCase()) {
+      case 'mobile':
+        return Container(
+          height: 25,
+            width: 25,
+            decoration: BoxDecoration(
+              color: Color(0xff008B8B).withOpacity(0.2),
+              borderRadius: BorderRadius.circular(4)
+            ),
+            child: const Icon(Icons.smartphone_rounded, size: 16, color: Color(0xff008B8B)));
+      case 'laptop':
+        return const Icon(Icons.laptop, size: 16, color: Color(0xff008B8B));
+      default:
+        return const SizedBox.shrink();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,19 +111,27 @@ class AttendanceCardComponent extends StatelessWidget {
                   ),
                 ),
                 Container(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
                   decoration: BoxDecoration(
-                    color: const Color(0xff4DFF00).withOpacity(0.3),
+                    color: _statusBackgroundColor(status),
                     borderRadius: BorderRadius.circular(6),
                   ),
-                  child: Text(
-                    status,
-                    style: const TextStyle(
-                      fontSize: 12,
-                      color: Color(0xff1C8300),
-                      fontWeight: FontWeight.w600,
-                    ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      if (status.toLowerCase() == 'weekend') ...[
+                        const Icon(Icons.beach_access, size: 14, color: Color(0xffFF8C00)),
+                        const SizedBox(width: 4),
+                      ],
+                      Text(
+                        status,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: _statusTextColor(status),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
@@ -81,10 +141,11 @@ class AttendanceCardComponent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 8),
-                    Text('Check-In', style: TextStyle(fontSize: 14)),
+                    _deviceIcon(checkInDevice),
+                    const SizedBox(width: 6),
+                    const Text('Check-In', style: TextStyle(fontSize: 14)),
                   ],
                 ),
                 Row(
@@ -115,10 +176,11 @@ class AttendanceCardComponent extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Row(
+                Row(
                   children: [
-                    SizedBox(width: 8),
-                    Text('Check-Out', style: TextStyle(fontSize: 14)),
+                    _deviceIcon(checkOutDevice),
+                    const SizedBox(width: 6),
+                    const Text('Check-Out', style: TextStyle(fontSize: 14)),
                   ],
                 ),
                 Row(

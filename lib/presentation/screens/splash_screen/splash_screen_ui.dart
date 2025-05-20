@@ -9,11 +9,25 @@ class SplashScreenUi extends StatefulWidget {
   State<SplashScreenUi> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreenUi> {
+class _SplashScreenState extends State<SplashScreenUi>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
+
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 2), () {
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    );
+
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(_controller);
+
+    _controller.forward();
+
+    Timer(const Duration(seconds: 3), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (_) => const LoginScreenUi()),
@@ -22,14 +36,23 @@ class _SplashScreenState extends State<SplashScreenUi> {
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff008B8B),
       body: Center(
-        child: Image.asset(
-          'assets/logo.png',
-          width: 200,
-          height: 150,
+        child: FadeTransition(
+          opacity: _animation,
+          child: Image.asset(
+            'assets/logo.png',
+            width: 200,
+            height: 150,
+          ),
         ),
       ),
     );

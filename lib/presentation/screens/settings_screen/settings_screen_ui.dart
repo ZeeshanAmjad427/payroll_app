@@ -187,10 +187,40 @@ class _SettingsScreenUiState extends State<SettingsScreenUi> {
         selectedIconTheme: const IconThemeData(color: Colors.white),
         unselectedIconTheme: const IconThemeData(color: Colors.white),
 
-        items: const [
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.calendar_today), label: 'Attendance'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.person), label: 'Profile'),
+        items: [
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              _selectedIndex == 1
+                  ? 'assets/home_selected.png'
+                  : 'assets/home_unselected.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Home',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              _selectedIndex == 1
+                  ? 'assets/calendar_selected.png'
+                  : 'assets/calendar_unselected.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Home',
+          ),
+
+          BottomNavigationBarItem(
+            icon: Image.asset(
+              _selectedIndex == 1
+                  ? 'assets/profile_selected.png'
+                  : 'assets/profile_unselected.png',
+              width: 24,
+              height: 24,
+            ),
+            label: 'Home',
+          ),
+
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
         ],
       ),

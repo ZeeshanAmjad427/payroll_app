@@ -12,12 +12,12 @@ class ProfileHeader extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            padding: const EdgeInsets.all(4),
+            padding: const EdgeInsets.all(0),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               border: Border.all(
                 color: const Color(0xff008B8B),
-                width: 2,
+                width: 3,
               ),
             ),
             child: const CircleAvatar(
@@ -46,6 +46,16 @@ class ProfileHeader extends StatelessWidget {
               ),
             ],
           ),
+          Spacer(),
+          Container(
+            height: 35,
+              width: 35,
+              decoration: BoxDecoration(
+              shape: BoxShape.rectangle,
+    borderRadius: BorderRadius.circular(4),
+    color: const Color(0xff008B8B).withOpacity(0.2),
+    ),
+              child: Icon(Icons.search,size: 32,color: Color(0xff008B8B),))
         ],
       ),
     );
