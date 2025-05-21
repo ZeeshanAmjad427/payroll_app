@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:payroll/services/token_manager.dart';
 import '../../../../domain/repositories/auth_repository.dart';
 import 'login_event.dart';
 import 'login_state.dart';
@@ -25,6 +26,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
 
       if (response.statusCode == 200 && response.isRequestSuccess) {
+        TokenManager.saveTokens(
+            accessToken: response.data?.token ?? "",
+            refreshToken: response.data?.refreshToken ?? "",
+            employeeId: response.data?.roleAndActions[0].id ?? "");
         emit(state.copyWith(
           email: event.email,
           password: event.password,

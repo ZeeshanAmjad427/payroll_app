@@ -1,25 +1,9 @@
+import '../../../../../data/models/location_model/attendance_model.dart';
+
 abstract class AttendanceEvent {}
 
-class CheckInEvent extends AttendanceEvent {
-  final String employeeId;
-  final double latitude;
-  final double longitude;
+class MarkAttendanceEvent extends AttendanceEvent {
+  final AttendanceModel attendanceModel;
 
-  CheckInEvent({
-    required this.employeeId,
-    required this.latitude,
-    required this.longitude,
-  });
-}
-
-class CheckOutEvent extends AttendanceEvent {
-  final String employeeId;
-  final double latitude;
-  final double longitude;
-
-  CheckOutEvent({
-    required this.employeeId,
-    required this.latitude,
-    required this.longitude,
-  });
+  MarkAttendanceEvent({required this.attendanceModel});
 }

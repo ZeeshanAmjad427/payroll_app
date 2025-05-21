@@ -207,7 +207,7 @@ class _SettingsScreenUiState extends State<SettingsScreenUi> {
               width: 24,
               height: 24,
             ),
-            label: 'Home',
+            label: 'Attendance',
           ),
 
           BottomNavigationBarItem(
@@ -218,7 +218,7 @@ class _SettingsScreenUiState extends State<SettingsScreenUi> {
               width: 24,
               height: 24,
             ),
-            label: 'Home',
+            label: 'Profile',
           ),
 
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),

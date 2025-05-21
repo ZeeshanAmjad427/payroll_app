@@ -1,21 +1,19 @@
-import '../../../domain/entities/location/attendance.dart';
+class AttendanceModel {
+  final String employeeId;
+  final DateTime date;
+  final String status;
+  final DateTime timeIn;
+  final String locationInId;
+  final int hoursWorked;
 
-class AttendanceModel extends Attendance {
   AttendanceModel({
-    required String employeeId,
-    required DateTime date,
-    required String status,
-    required DateTime timeIn,
-    required String locationInId,
-    required int hoursWorked,
-  }) : super(
-    employeeId: employeeId,
-    date: date,
-    status: status,
-    timeIn: timeIn,
-    locationInId: locationInId,
-    hoursWorked: hoursWorked,
-  );
+    required this.employeeId,
+    required this.date,
+    required this.status,
+    required this.timeIn,
+    required this.locationInId,
+    required this.hoursWorked,
+  });
 
   factory AttendanceModel.fromJson(Map<String, dynamic> json) {
     return AttendanceModel(

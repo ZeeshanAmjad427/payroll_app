@@ -6,44 +6,26 @@ import 'attendance_state.dart';
 class AttendanceBloc extends Bloc<AttendanceEvent, AttendanceState> {
   final AttendanceUseCase attendanceUseCase;
 
-  AttendanceBloc(this.attendanceUseCase) : super(AttendanceInitial()) {
-    on<CheckInEvent>(_onCheckIn);
-    on<CheckOutEvent>(_onCheckOut);
+  AttendanceBloc(this.attendanceUseCase) : super(AttendanceState()) {
+    on<MarkAttendanceEvent>(_onMarkAttendance);
   }
 
-  Future<void> _onCheckIn(CheckInEvent event, Emitter<AttendanceState> emit) async {
-    emit(AttendanceLoading());
+  Future<void> _onMarkAttendance(
+      MarkAttendanceEvent event,
+      Emitter<AttendanceState> emit,
+      ) async {
+    emit(AttendanceState(loginStatus: MarkAttendanceStatus.loading));
+
     try {
-      final success = await attendanceUseCase.checkIn(
-        employeeId: event.employeeId,
-        latitude: event.latitude,
-        longitude: event.longitude,
-      );
+      final success = await attendanceUseCase.markAttendance(event.attendanceModel);
       if (success) {
-        emit(AttendanceSuccess("Checked in successfully"));
+        emit(AttendanceState(loginStatus: MarkAttendanceStatus.success));
       } else {
-        emit(AttendanceFailure("Check-in failed"));
+        emit(AttendanceState(loginStatus: MarkAttendanceStatus.success));
       }
     } catch (e) {
-      emit(AttendanceFailure("Check-in failed: ${e.toString()}"));
+      emit(AttendanceState(loginStatus: MarkAttendanceStatus.success));
     }
   }
 
-  Future<void> _onCheckOut(CheckOutEvent event, Emitter<AttendanceState> emit) async {
-    emit(AttendanceLoading());
-    try {
-      final success = await attendanceUseCase.checkOut(
-        employeeId: event.employeeId,
-        latitude: event.latitude,
-        longitude: event.longitude,
-      );
-      if (success) {
-        emit(AttendanceSuccess("Checked out successfully"));
-      } else {
-        emit(AttendanceFailure("Check-out failed"));
-      }
-    } catch (e) {
-      emit(AttendanceFailure("Check-out failed: ${e.toString()}"));
-    }
-  }
 }

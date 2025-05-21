@@ -1,9 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:payroll/data/models/totp_model/on_totp_request_model.dart';
 import 'package:payroll/presentation/screens/home_screen/home_screen_ui/widgets/top_left_gradient_color.dart';
 import 'package:payroll/presentation/screens/manager_profile_screen/manager_profile_screen_ui.dart';
+import 'package:payroll/presentation/screens/profile_screen/totp_bloc/totp_bloc.dart';
+import 'package:payroll/presentation/screens/profile_screen/totp_bloc/totp_event.dart';
+import 'package:payroll/presentation/screens/profile_screen/totp_bloc/totp_state.dart';
 import 'package:payroll/presentation/screens/profile_screen/widgets/input_filed_component.dart';
 import 'package:payroll/presentation/screens/settings_screen/settings_screen_ui.dart';
+import 'package:payroll/services/token_manager.dart';
 
 import '../attendance_log_screen/attendance_log_screen_ui.dart';
 import '../home_screen/home_screen_ui/home_screen_ui.dart';
@@ -16,7 +22,7 @@ class ProfileScreenUi extends StatefulWidget {
 }
 
 class _ProfileScreenUiState extends State<ProfileScreenUi> {
-  // Controllers for each text field
+
   final TextEditingController employeeIdController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController contactNoController = TextEditingController();
@@ -28,6 +34,8 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
   final TextEditingController employmentTypeController = TextEditingController();
   final TextEditingController joiningDateController = TextEditingController();
   bool _is2FAEnabled = false;
+  String? employeeId = "";
+  String? secretKey = "";
 
 
   int _selectedIndex = 0;
@@ -54,9 +62,34 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    isTotpEnable();
+  }
+
+  Future<void> isTotpEnable() async {
+    if(await TokenManager.getSecretKey() !=null){
+      secretKey = await TokenManager.getSecretKey();
+    }
+    employeeId = await TokenManager.getEmployeeId();
+    bool? isTotp = await TokenManager.getIsTotp();
+    if (!mounted) return; // 👈 Important check
+    context.read<TotpBloc>().add(GetTotpEvent());
+
+    // if (isTotp == false) {
+    //   context.read<TotpBloc>().add(GetTotpEvent());
+    // }
+  }
 
   @override
   Widget build(BuildContext context) {
+    return BlocConsumer<TotpBloc, TotpState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, state) {
+    final stateValue = context.read<TotpBloc>().state;
     return Scaffold(
       body: Stack(
         children: [
@@ -295,6 +328,11 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
                                       activeTrackColor: Color(0xff008B8B),
                                       value: _is2FAEnabled,
                                       onChanged: (bool value) {
+                                        context.read<TotpBloc>().add(
+                                          On2faEvent(
+                                              onTotpRequestModel: OnTotpRequestModel(userId: employeeId ?? "", secretKey: stateValue.secretKey ?? "", isTotp: true)
+                                          ),
+                                        );
                                         setState(() {
                                           _is2FAEnabled = value;
                                         });
@@ -357,10 +395,10 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
                                   ),
                                   child: Row(
                                     children: [
-                                      const Expanded(
+                                       Expanded(
                                         child: Text(
-                                          "ABCD-EFGH-IJKL",
-                                          style: TextStyle(fontSize: 14),
+                                          state.secretKey ?? "12345",
+                                          style: TextStyle(fontSize: 14,color: Colors.black),
                                         ),
                                       ),
                                       IconButton(
@@ -456,7 +494,7 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
               width: 24,
               height: 24,
             ),
-            label: 'Home',
+            label: 'Attendance',
           ),
 
           BottomNavigationBarItem(
@@ -467,12 +505,14 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
               width: 24,
               height: 24,
             ),
-            label: 'Home',
+            label: 'Profile',
           ),
 
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
         ],
       ),
     );
+  },
+);
   }
 }

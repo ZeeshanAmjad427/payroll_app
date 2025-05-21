@@ -1,45 +1,20 @@
 import 'package:dio/dio.dart';
-
+import 'package:payroll/config/api_endpoints/api_endpoints.dart';
+import 'package:payroll/data/models/location_model/location_in_and_out_model.dart';
+import 'package:payroll/dio_client/dio_client.dart';
 import '../../models/location_model/attendance_model.dart';
-import '../../models/location_model/location_in.dart';
-import '../../models/location_model/location_out.dart';
 
 
 class AttendanceRemoteDataSource {
-  final Dio dio;
-  AttendanceRemoteDataSource(this.dio);
+  final dio = DioClient().dio;
 
-  Future<String?> addLocationIn(LocationInModel locationIn) async {
-    final response = await dio.post('/location-in', data: locationIn.toJson());
-    if (response.statusCode == 200) {
-      return response.data['locationId']; // adjust based on API response
-    }
-    return null;
+  Future<bool> markAttendance(AttendanceModel attendance) async {
+    final response = await dio.post(ApiEndpoints.addAttendanceUrl, data: attendance.toJson());
+    return response.statusCode == 200;
   }
-
-  Future<bool> addAttendance(AttendanceModel attendance) async {
-    final response = await dio.post('/attendance', data: attendance.toJson());
+  Future<bool> checkIn(LocationInAndOutModel checkIn) async {
+    final response = await dio.post(ApiEndpoints.addLocationInUrl, data: checkIn.toJson());
     return response.statusCode == 200;
   }
 
-  Future<String?> addLocationOut(LocationOutModel locationOut) async {
-    final response = await dio.post('/location-out', data: locationOut.toJson());
-    if (response.statusCode == 200) {
-      return response.data['locationId'];
-    }
-    return null;
-  }
-
-  Future<bool> updateAttendance({
-    required String employeeId,
-    required String locationOutId,
-    required DateTime timeOut,
-  }) async {
-    final response = await dio.put('/attendance/update', data: {
-      'employeeId': employeeId,
-      'locationOutId': locationOutId,
-      'timeOut': timeOut.toIso8601String(),
-    });
-    return response.statusCode == 200;
-  }
 }
