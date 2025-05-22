@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ProfileHeader extends StatelessWidget {
@@ -55,7 +56,7 @@ class ProfileHeader extends StatelessWidget {
     borderRadius: BorderRadius.circular(4),
     color: const Color(0xff008B8B).withOpacity(0.2),
     ),
-              child: Icon(Icons.search,size: 32,color: Color(0xff008B8B),))
+              child: Icon(CupertinoIcons.search,size: 32,color: Color(0xff008B8B),))
         ],
       ),
     );

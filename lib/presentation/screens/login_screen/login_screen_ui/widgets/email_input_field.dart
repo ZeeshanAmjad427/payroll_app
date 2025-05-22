@@ -5,16 +5,21 @@ class InputField extends StatelessWidget {
   final String hintText;
   final TextEditingController textEditingControllerValue;
 
-  const InputField({super.key,required this.title,required this.hintText,required this.textEditingControllerValue});
+  const InputField({
+    super.key,
+    required this.title,
+    required this.hintText,
+    required this.textEditingControllerValue,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-         Text(
+        Text(
           title,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 14,
             fontWeight: FontWeight.w500,
             color: Colors.grey,
@@ -23,16 +28,26 @@ class InputField extends StatelessWidget {
         const SizedBox(height: 8),
         TextField(
           controller: textEditingControllerValue,
-          keyboardType: TextInputType.emailAddress,
+          keyboardType: TextInputType.text,
           decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.shade300),
+            isDense: true,
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 16,
+              horizontal: 16, // Ensures left padding for both hint and input text
             ),
             hintText: hintText,
             hintStyle: const TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w500,
+              color: Colors.grey,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.grey.shade300),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: const BorderSide(color: Color(0xff008B8B)),
             ),
           ),
         ),

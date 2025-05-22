@@ -29,7 +29,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         TokenManager.saveTokens(
             accessToken: response.data?.token ?? "",
             refreshToken: response.data?.refreshToken ?? "",
-            employeeId: response.data?.roleAndActions[0].id ?? "");
+            employeeId: response.data?.roleAndActions[0].id ?? "",
+            isTotp: response.data?.isTotp,
+            secretKey: response.data?.secretKey,
+        );
+
         emit(state.copyWith(
           email: event.email,
           password: event.password,

@@ -65,7 +65,8 @@ class InfoContainer extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               data,
-              style: const TextStyle(fontSize: 20, color: Colors.black),
+              style: const TextStyle(fontSize: 20,
+                  color: Color(0xff008B8B)),
             ),
             const SizedBox(height: 6),
             Text(

@@ -20,7 +20,7 @@ class CalendarScroller extends StatelessWidget {
       height: 80,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: 38),
         controller: scrollController,
         itemCount: days.length,
         itemBuilder: (context, index) {
@@ -30,7 +30,7 @@ class CalendarScroller extends StatelessWidget {
               DateTime.now().year == day.year;
 
           return Container(
-            width: MediaQuery.of(context).size.width * 0.22,
+            width: MediaQuery.of(context).size.width * 0.20,
             margin: const EdgeInsets.only(right: 12),
             decoration: BoxDecoration(
               color: isToday ? const Color(0xff008B8B) : Colors.white,

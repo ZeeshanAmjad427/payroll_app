@@ -1,3 +1,44 @@
+class LoginDataModel {
+  final String name;
+  final String email;
+  final String userId;
+  final String userType;
+  final String token;
+  final String refreshToken;
+  final String? secretKey;
+  final bool isTotp;
+  final List<RoleAndAction> roleAndActions;
+
+  LoginDataModel({
+    required this.name,
+    required this.email,
+    required this.userId,
+    required this.userType,
+    required this.token,
+    required this.refreshToken,
+    required this.secretKey,
+    required this.isTotp,
+    required this.roleAndActions,
+  });
+
+  factory LoginDataModel.fromJson(Map<String, dynamic> json) {
+    return LoginDataModel(
+      name: json['name'] ?? '',
+      email: json['email'] ?? '',
+      userId: json['userId'] ?? '',
+      userType: json['userType'] ?? '',
+      token: json['token'] ?? '',
+      refreshToken: json['refreshToken'] ?? '',
+      secretKey: json['secretKey'], // Nullable
+      isTotp: json['isTotp'] ?? false,
+      roleAndActions: (json['roleAndActions'] as List<dynamic>?)
+          ?.map((e) => RoleAndAction.fromJson(e))
+          .toList() ??
+          [],
+    );
+  }
+}
+
 class LoginResponseModel {
   final bool isApiHandled;
   final bool isRequestSuccess;
@@ -23,41 +64,6 @@ class LoginResponseModel {
       message: json['message'] ?? '',
       data: json['data'] != null ? LoginDataModel.fromJson(json['data']) : null,
       exception: json['exception'] ?? [],
-    );
-  }
-}
-
-class LoginDataModel {
-  final String name;
-  final String email;
-  final String userId;
-  final String userType;
-  final String token;
-  final String refreshToken;
-  final List<RoleAndAction> roleAndActions;
-
-  LoginDataModel({
-    required this.name,
-    required this.email,
-    required this.userId,
-    required this.userType,
-    required this.token,
-    required this.refreshToken,
-    required this.roleAndActions,
-  });
-
-  factory LoginDataModel.fromJson(Map<String, dynamic> json) {
-    return LoginDataModel(
-      name: json['name'] ?? '',
-      email: json['email'] ?? '',
-      userId: json['userId'] ?? '',
-      userType: json['userType'] ?? '',
-      token: json['token'] ?? '',
-      refreshToken: json['refreshToken'] ?? '',
-      roleAndActions: (json['roleAndActions'] as List<dynamic>?)
-          ?.map((e) => RoleAndAction.fromJson(e))
-          .toList() ??
-          [],
     );
   }
 }
@@ -102,4 +108,3 @@ class RoleAndAction {
     );
   }
 }
-

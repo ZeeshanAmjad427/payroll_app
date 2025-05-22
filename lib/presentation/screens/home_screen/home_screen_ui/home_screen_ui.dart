@@ -301,7 +301,7 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                                           strokeWidth: 3,
                                           valueColor: AlwaysStoppedAnimation<Color>(Color(0xff008B8B)),
                                         ),
-                                      const Icon(Icons.location_on_outlined, color: Color(0xff008B8B), size: 28),
+                                      Image.asset('assets/location.png'),
                                     ],
                                   ),
                                 ),

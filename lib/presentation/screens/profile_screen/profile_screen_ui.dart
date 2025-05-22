@@ -74,12 +74,11 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
     }
     employeeId = await TokenManager.getEmployeeId();
     bool? isTotp = await TokenManager.getIsTotp();
-    if (!mounted) return; // 👈 Important check
-    context.read<TotpBloc>().add(GetTotpEvent());
-
-    // if (isTotp == false) {
-    //   context.read<TotpBloc>().add(GetTotpEvent());
-    // }
+    print('TOTP : $isTotp');
+    if (!mounted) return; //
+    if (!isTotp!) {
+      context.read<TotpBloc>().add(GetTotpEvent());
+    }
   }
 
   @override
