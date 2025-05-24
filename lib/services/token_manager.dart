@@ -6,6 +6,7 @@ class TokenManager {
   static const String _employeeId = 'employee_id';
   static const String _secretKey = 'secret_key';
   static const String _isTotp = 'is_totp';
+  static const String _isTotpVerified = 'is_totp_verified';
 
   static Future<void> saveTokens({
     required String accessToken,
@@ -26,6 +27,11 @@ class TokenManager {
     if (isTotp != null) {
       await prefs.setBool(_isTotp, isTotp);
     }
+  }
+
+  static Future<void> setTotpVerified(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_isTotpVerified, value);
   }
 
   static Future<String?> getAccessToken() async {
@@ -53,6 +59,11 @@ class TokenManager {
     return prefs.getBool(_isTotp);
   }
 
+  static Future<bool?> getTotpVerified() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(_isTotpVerified);
+  }
+
   static Future<void> clearTokens() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_accessTokenKey);
@@ -60,5 +71,11 @@ class TokenManager {
     await prefs.remove(_employeeId);
     await prefs.remove(_secretKey);
     await prefs.remove(_isTotp);
+    await prefs.remove(_isTotpVerified);
+  }
+
+  static Future<void> setSecretKey(String secretKey) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_secretKey, secretKey);
   }
 }

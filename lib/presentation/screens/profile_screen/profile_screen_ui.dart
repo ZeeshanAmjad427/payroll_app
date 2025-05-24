@@ -1,7 +1,12 @@
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:payroll/core/utils/header_util.dart';
+import 'package:payroll/core/utils/snack_bar_util.dart';
 import 'package:payroll/data/models/totp_model/on_totp_request_model.dart';
+import 'package:payroll/presentation/screens/bottom_navbar_screen/bottom_navbar_screen.dart';
 import 'package:payroll/presentation/screens/home_screen/home_screen_ui/widgets/top_left_gradient_color.dart';
 import 'package:payroll/presentation/screens/manager_profile_screen/manager_profile_screen_ui.dart';
 import 'package:payroll/presentation/screens/profile_screen/totp_bloc/totp_bloc.dart';
@@ -10,7 +15,6 @@ import 'package:payroll/presentation/screens/profile_screen/totp_bloc/totp_state
 import 'package:payroll/presentation/screens/profile_screen/widgets/input_filed_component.dart';
 import 'package:payroll/presentation/screens/settings_screen/settings_screen_ui.dart';
 import 'package:payroll/services/token_manager.dart';
-
 import '../attendance_log_screen/attendance_log_screen_ui.dart';
 import '../home_screen/home_screen_ui/home_screen_ui.dart';
 
@@ -69,14 +73,18 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
   }
 
   Future<void> isTotpEnable() async {
-    if(await TokenManager.getSecretKey() !=null){
-      secretKey = await TokenManager.getSecretKey();
-    }
+    secretKey = await TokenManager.getSecretKey();
     employeeId = await TokenManager.getEmployeeId();
     bool? isTotp = await TokenManager.getIsTotp();
     print('TOTP : $isTotp');
-    if (!mounted) return; //
-    if (!isTotp!) {
+
+    if (!mounted) return;
+
+    // setState(() {
+    //   _is2FAEnabled = isTotp ?? false;
+    // });
+
+    if (!(isTotp ?? false)) {
       context.read<TotpBloc>().add(GetTotpEvent());
     }
   }
@@ -85,7 +93,19 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
   Widget build(BuildContext context) {
     return BlocConsumer<TotpBloc, TotpState>(
   listener: (context, state) {
-    // TODO: implement listener
+    if (state.loginStatus == TotpStatus.success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(state.isTotp
+              ? '2FA Enabled Successfully'
+              : '2FA Disabled Successfully'),
+        ),
+      );
+      return;
+    }
+    if(state.loginStatus == TotpStatus.failure){
+      SnackBarUtil.showSnackBar(context, state.message);
+    }
   },
   builder: (context, state) {
     final stateValue = context.read<TotpBloc>().state;
@@ -96,34 +116,9 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
             painter: TopLeftGradientPainter(),
             child: Container(),
           ),
+          HeaderUtil(title: "My Profile"),
           Positioned(
-            top: 60,
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  Expanded(
-                    child: const Center(
-                      child: Text(
-                        'My Profile',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.15,
+            top: MediaQuery.of(context).size.height * 0.15.h,
             left: 0,
             right: 0,
             bottom: 0,
@@ -132,13 +127,13 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
               shadowColor: Colors.black.withOpacity(0.1),
               elevation: 5,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
               ),
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+                padding:  EdgeInsets.all(16.w),
                 child: Column(
                   children: [
-                    SizedBox(height: 16),
+                    SizedBox(height: 16.h),
                     Stack(
                       children: [
                         Container(
@@ -151,64 +146,67 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
                             ),
                           ),
                           child: CircleAvatar(
-                            radius: 50,
+                            radius: 50.r,
                             backgroundImage: AssetImage('assets/profile.jpg'),
                           ),
                         ),
                         Positioned(
-                          bottom: 10,
+                          bottom: 10.h,
                           right: 0,
                           child: Container(
                             decoration: BoxDecoration(
                               color: Color(0xff008B8B),
                               shape: BoxShape.circle,
                             ),
-                            padding: EdgeInsets.all(4),
+                            padding: EdgeInsets.all(4.w),
                             child: Icon(
                               Icons.edit,
-                              size: 18,
+                              size: 18.r,
                               color: Colors.white,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 8),
+                    SizedBox(height: 8.h),
                     Text(
                       'Mustafa Tayabani',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     Text(
                       'Sr. UI/UX Designer',
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // Personal Info Section
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Personal Info',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    Row(
+                      children: [
+                        Text(
+                          'Personal Info',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 4),
-                    Divider(
-                      color: Colors.grey.withOpacity(0.2),
+                    SizedBox(height: 4.h),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 2.w,vertical: 4.h,),
+                      child: DottedLine(
+                        dashLength: 3.0,
+                        dashGapLength: 5.0,
+                        lineThickness: 1.0,
+                        dashColor: Colors.grey.withOpacity(0.4),
+                      ),
                     ),
 
                     InputFiledComponent(
@@ -248,24 +246,27 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
                       controller: maritalStatusController,
                       hintText: 'Single',
                     ),
-                    SizedBox(height: 4,),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Organization Info',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
+                    SizedBox(height: 4.h),
+                    Row(
+                      children: [
+                        Text(
+                          'Organization Info',
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.bold,
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 4,),
-                    Divider(
-                      color: Colors.grey.withOpacity(0.2),
+                    SizedBox(height: 4.h),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 2.w,vertical: 4.h),
+                      child: DottedLine(
+                        dashLength: 3.0,
+                        dashGapLength: 5.0,
+                        lineThickness: 1.0,
+                        dashColor: Colors.grey.withOpacity(0.4),
+                      ),
                     ),
                     InputFiledComponent(
                       label: 'Organization',
@@ -278,7 +279,14 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
                       hintText: 'Shayan Sherwani',
                       trailingText: 'View Profile',
                       onTrailingTap: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ManagerProfileScreenUi()));
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BottomNavbarScreen(
+                              overrideScreen: const ManagerProfileScreenUi(),
+                            ),
+                          ),
+                        );
                       },
                     ),
 
@@ -294,74 +302,94 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
                       hintText: '10 December 2024',
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
+                      padding:  EdgeInsets.only(top: 16.0.h),
                       child: Card(
                         color: Colors.white,
                         shadowColor: Colors.white,
                         elevation: 4,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12.r),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: 50,
+                              height: 50.h,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Padding(
-                                    padding: const EdgeInsets.only(left: 8.0),
+                                    padding:  EdgeInsets.only(left: 8.0.w),
                                     child: Text(
                                       'Enable 2FA',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 16,
+                                        fontSize: 16.sp,
                                       ),
                                     ),
                                   ),
                                   Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
+                                    padding: EdgeInsets.only(right: 8.0.w),
                                     child: CupertinoSwitch(
-                                      activeTrackColor: Color(0xff008B8B),
-                                      value: _is2FAEnabled,
+                                      activeTrackColor: const Color(0xff008B8B),
+                                      value: state.isTotp,
                                       onChanged: (bool value) {
-                                        context.read<TotpBloc>().add(
-                                          On2faEvent(
-                                              onTotpRequestModel: OnTotpRequestModel(userId: employeeId ?? "", secretKey: stateValue.secretKey ?? "", isTotp: true)
-                                          ),
-                                        );
-                                        setState(() {
-                                          _is2FAEnabled = value;
-                                        });
+                                        print("VAL: ${state.isTotp}");
+                                        if (value) {
+                                          // Enable 2FA
+                                          context.read<TotpBloc>().add(
+                                            On2faEvent(
+                                              onTotpRequestModel: OnTotpRequestModel(
+                                                userId: employeeId ?? "",
+                                                secretKey: secretKey ?? "",
+                                                isTotp: true,
+                                              ),
+                                            ),
+                                          );
+                                        } else {
+                                          // Disable 2FA
+                                          context.read<TotpBloc>().add(
+                                            OnRemove2faEvent(
+                                              userId: employeeId ?? "",
+                                            ),
+                                          );
+                                        }
                                       },
                                     ),
-                                  ),
+                                  )
                                 ],
                               ),
                             ),
 
-                            if (_is2FAEnabled) ...[
-                              const SizedBox(height: 12),
+                            if (state.isTotp) ...[
+                               SizedBox(height: 6.h),
                               Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
-                                child: const Text(
+                                padding:  EdgeInsets.only(left: 8.0.w),
+                                child:  Text(
                                   'Scan this QR code in-app to verify a account',
-                                  style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400),
+                                  style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.w400),
                                 ),
                               ),
-                              const SizedBox(height: 12),
-                              Divider(color: Colors.grey.withOpacity(0.3)),
-                              const SizedBox(height: 12),
+                               SizedBox(height: 12.h),
+                              Padding(
+                                padding:  EdgeInsets.symmetric(horizontal: 2.w,vertical: 4.h,),
+                                child: DottedLine(
+                                  dashLength: 3.0,
+                                  dashGapLength: 5.0,
+                                  lineThickness: 1.0,
+                                  dashColor: Colors.grey.withOpacity(0.4),
+                                ),
+                              ),
+                               SizedBox(height: 12.h),
 
                               // QR Code Placeholder
                               Center(
                                 child: Container(
-                                  width: 150,
-                                  height: 150,
+                                  width: 150.w,
+                                  height: 150.h,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(8.r),
                                   ),
                                   child:  Center(
                                       child: Image.asset('assets/QR.png')
@@ -369,39 +397,56 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
                                 ),
                               ),
 
-                              const SizedBox(height: 10),
+                               SizedBox(height: 10.h),
 
                               Row(
                                 children: [
-                                  Expanded(child: Divider(color: Colors.grey.withOpacity(0.3))),
-                                  const Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                    child: Text("or enter the security key manually", style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold)),
+                                  Expanded(child: Padding(
+                                    padding:  EdgeInsets.symmetric(horizontal: 2.w,vertical: 4.h,),
+                                    child: DottedLine(
+                                      dashLength: 3.0,
+                                      dashGapLength: 5.0,
+                                      lineThickness: 1.0,
+                                      dashColor: Colors.grey.withOpacity(0.4),
+                                    ),
                                   ),
-                                  Expanded(child: Divider(color: Colors.grey.withOpacity(0.3))),
+                                  ),
+                                   Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 8.0.w),
+                                    child: Text("or enter the security key manually", style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.bold)),
+                                  ),
+                                  Expanded(child: Padding(
+                                    padding:  EdgeInsets.symmetric(horizontal: 2.w,vertical: 4.h,),
+                                    child: DottedLine(
+                                      dashLength: 3.0,
+                                      dashGapLength: 5.0,
+                                      lineThickness: 1.0,
+                                      dashColor: Colors.grey.withOpacity(0.4),
+                                    ),
+                                  ),),
                                 ],
                               ),
-                              const SizedBox(height: 12),
+                               SizedBox(height: 12.h),
 
 
                               Padding(
-                                padding: const EdgeInsets.all(8.0),
+                                padding:  EdgeInsets.all(8.0.w),
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 0),
+                                  padding:  EdgeInsets.symmetric(horizontal: 6.w, vertical: 0.h),
                                   decoration: BoxDecoration(
                                     border: Border.all(color: Colors.grey.shade300),
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(8.r),
                                   ),
                                   child: Row(
                                     children: [
                                        Expanded(
                                         child: Text(
-                                          state.secretKey ?? "12345",
-                                          style: TextStyle(fontSize: 14,color: Colors.black),
+                                         secretKey.toString(),
+                                          style: TextStyle(fontSize: 14.sp,color: Colors.black),
                                         ),
                                       ),
                                       IconButton(
-                                        icon: const Icon(Icons.copy, size: 20),
+                                        icon:  Icon(Icons.copy, size: 20.r),
                                         onPressed: () {
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             const SnackBar(content: Text("Copied to clipboard")),
@@ -412,32 +457,32 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
                                   ),
                                 ),
                               ),
-                              const SizedBox(height: 16),
+                               SizedBox(height: 16.h),
                               Container(
                                 width: double.infinity,
-                                padding: const EdgeInsets.symmetric(vertical: 12),
-                                decoration: const BoxDecoration(
+                                padding:  EdgeInsets.symmetric(vertical: 12.h),
+                                decoration:  BoxDecoration(
                                   color: Color(0xff008B8B),
                                   borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(12),
-                                    bottomRight: Radius.circular(12),
+                                    bottomLeft: Radius.circular(12.r),
+                                    bottomRight: Radius.circular(12.r),
                                   ),
                                 ),
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    const SizedBox(width: 8),
-                                    const Text(
+                                     SizedBox(width: 8.w),
+                                     Text(
                                       'Trusted By LockKeyz',
                                       style: TextStyle(
                                         color: Colors.white,
                                         fontWeight: FontWeight.w500,
-                                        fontSize: 14,
+                                        fontSize: 14.sp,
                                       ),
                                     ),
                                     Image.asset(
                                       'assets/lockKeyz.png',
-                                      height: 30,
+                                      height: 30.h,
                                     ),
                                   ],
                                 ),
@@ -457,59 +502,59 @@ class _ProfileScreenUiState extends State<ProfileScreenUi> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xff008B8B),
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-
-        selectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 10),
-        unselectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 10),
-
-        selectedIconTheme: const IconThemeData(color: Colors.white),
-        unselectedIconTheme: const IconThemeData(color: Colors.white),
-
-        items: [
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              _selectedIndex == 1
-                  ? 'assets/home_selected.png'
-                  : 'assets/home_unselected.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Home',
-          ),
-
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              _selectedIndex == 1
-                  ? 'assets/calendar_selected.png'
-                  : 'assets/calendar_unselected.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Attendance',
-          ),
-
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              _selectedIndex == 0
-                  ? 'assets/profile_selected.png'
-                  : 'assets/profile_unselected.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Profile',
-          ),
-
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: const Color(0xff008B8B),
+      //   currentIndex: _selectedIndex,
+      //   onTap: _onItemTapped,
+      //   showUnselectedLabels: true,
+      //   type: BottomNavigationBarType.fixed,
+      //
+      //   selectedItemColor: Colors.white,
+      //   unselectedItemColor: Colors.white,
+      //
+      //   selectedLabelStyle:  TextStyle(color: Colors.white, fontSize: 10.sp),
+      //   unselectedLabelStyle:  TextStyle(color: Colors.white, fontSize: 10.sp),
+      //
+      //   selectedIconTheme: const IconThemeData(color: Colors.white),
+      //   unselectedIconTheme: const IconThemeData(color: Colors.white),
+      //
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       icon: Image.asset(
+      //         _selectedIndex == 1
+      //             ? 'assets/home_selected.png'
+      //             : 'assets/home_unselected.png',
+      //         width: 24,
+      //         height: 24,
+      //       ),
+      //       label: 'Home',
+      //     ),
+      //
+      //     BottomNavigationBarItem(
+      //       icon: Image.asset(
+      //         _selectedIndex == 1
+      //             ? 'assets/calendar_selected.png'
+      //             : 'assets/calendar_unselected.png',
+      //         width: 24,
+      //         height: 24,
+      //       ),
+      //       label: 'Attendance',
+      //     ),
+      //
+      //     BottomNavigationBarItem(
+      //       icon: Image.asset(
+      //         _selectedIndex == 0
+      //             ? 'assets/profile_selected.png'
+      //             : 'assets/profile_unselected.png',
+      //         width: 24,
+      //         height: 24,
+      //       ),
+      //       label: 'Profile',
+      //     ),
+      //
+      //     BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
+      //   ],
+      // ),
     );
   },
 );

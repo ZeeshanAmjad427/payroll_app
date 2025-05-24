@@ -3,7 +3,7 @@ class TotpResponseModel {
   final bool isRequestSuccess;
   final int statusCode;
   final String message;
-  final String data;
+  final dynamic data; // Changed to dynamic to handle bool or String
   final List<dynamic> exception;
 
   TotpResponseModel({
@@ -21,7 +21,7 @@ class TotpResponseModel {
       isRequestSuccess: json['isRequestSuccess'] ?? false,
       statusCode: json['statusCode'] ?? 0,
       message: json['message'] ?? '',
-      data: json['data'] ?? '',
+      data: json['data'], // Keep as dynamic (bool or String)
       exception: json['exception'] ?? [],
     );
   }

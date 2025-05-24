@@ -1,13 +1,16 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:payroll/data/datasources/attendance/attendance_remote_data_source.dart';
+import 'package:payroll/data/models/location_model/update_attendance_model.dart';
 import 'package:payroll/domain/usecases/attendance_usecase.dart';
 import 'package:payroll/presentation/screens/attendance_log_screen/attendance_log_screen_ui.dart';
 import 'package:payroll/presentation/screens/home_screen/home_screen_ui/attendance_bloc/attendance_event.dart';
@@ -21,6 +24,7 @@ import 'package:payroll/services/token_manager.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
 import '../../../../data/models/location_model/attendance_model.dart';
+import '../../../../data/models/location_model/location_in_and_out_model.dart';
 import '../../../../data/repositories/attendance_repository_impl.dart';
 import '../../../../domain/repositories/attendance_repository.dart';
 import 'attendance_bloc/attendance_bloc.dart';
@@ -201,7 +205,7 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
             const ProfileHeader(),
             CalendarScroller(days: _days, scrollController: _scrollController),
             Positioned(
-              top: MediaQuery.of(context).size.height * 0.32,
+              top: MediaQuery.of(context).size.height * 0.32.h,
               left: 0,
               right: 0,
               bottom: 0,
@@ -210,15 +214,15 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                 shadowColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(16.r),
                 ),
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(12),
+                  padding:  EdgeInsets.all(12.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text('Last Attendance', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 16),
+                       Text('Last Attendance', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+                       SizedBox(height: 16.h),
                       Row(
                         children: [
                           Expanded(
@@ -243,12 +247,12 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                       SizedBox(height: 16.h),
                       Row(
                         children: [
                           Expanded(
                             child: InfoContainer(
-                              icon: const Icon(Icons.directions_run_sharp, size: 22, color: Color(0xff008B8B)),
+                              icon:  Icon(Icons.directions_run_sharp, size: 22.r, color: Color(0xff008B8B)),
                               title: 'Total Lates',
                               data: '02',
                               text: 'Late Check In',
@@ -256,7 +260,7 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                           ),
                           Expanded(
                             child: InfoContainer(
-                              icon: const Icon(Icons.calendar_today_outlined, size: 22, color: Color(0xff008B8B)),
+                              icon:  Icon(Icons.calendar_today_outlined, size: 22.r, color: Color(0xff008B8B)),
                               title: 'Total Days',
                               data: '31',
                               text: 'Working Days',
@@ -264,15 +268,15 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
-                      const Text('Current Location', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 10),
+                       SizedBox(height: 10.h),
+                       Text('Current Location', style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold)),
+                       SizedBox(height: 10.h),
                       Container(
                         width: double.infinity,
-                        padding: const EdgeInsets.all(16),
+                        padding:  EdgeInsets.all(16.w),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12.r),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey.withOpacity(0.4),
@@ -286,11 +290,11 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                             Row(
                               children: [
                                 Container(
-                                  height: 30,
-                                  width: 30,
+                                  height: 30.h,
+                                  width: 30.w,
                                   decoration: BoxDecoration(
                                     shape: BoxShape.rectangle,
-                                    borderRadius: BorderRadius.circular(4),
+                                    borderRadius: BorderRadius.circular(4.r),
                                     color: const Color(0xff008B8B).withOpacity(0.2),
                                   ),
                                   child: Stack(
@@ -305,30 +309,30 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                                     ],
                                   ),
                                 ),
-                                const SizedBox(width: 10),
+                                 SizedBox(width: 10.w),
                                 Expanded(
                                   child: Text(
                                     _currentAddress ?? "Address not available",
-                                    style: const TextStyle(fontSize: 14),
+                                    style:  TextStyle(fontSize: 14.sp),
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 30),
+                             SizedBox(height: 30.h),
                             SizedBox(
-                              height: 50,
+                              height: 50.h,
                               child: ElevatedButton(
                                 onPressed: _fetchLocation,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xff008B8B),
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
                                 ),
-                                child: const Row(
+                                child:  Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text('Fetch Again', style: TextStyle(color: Colors.white)),
-                                    SizedBox(width: 8),
-                                    Icon(CupertinoIcons.arrow_2_circlepath, color: Colors.white, size: 20),
+                                    SizedBox(width: 8.w),
+                                    Icon(CupertinoIcons.arrow_2_circlepath, color: Colors.white, size: 20.r),
                                   ],
                                 ),
                               ),
@@ -336,12 +340,12 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 20),
+                       SizedBox(height: 20.h),
                       Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        margin:  EdgeInsets.symmetric(vertical: 10.h),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(12.r),
                           boxShadow: [
                             BoxShadow(
                               color: Colors.grey.withOpacity(0.4),
@@ -351,7 +355,7 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                           ],
                         ),
                         child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+                          padding:  EdgeInsets.symmetric(horizontal: 0.w, vertical: 4.h),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -367,21 +371,21 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                                       });
                                     },
                                   ),
-                                  const Text(
+                                   Text(
                                     'Work From Home?',
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 14.sp,
                                       fontWeight: FontWeight.w600,
                                     ),
                                   ),
                                   const Spacer(),
                                   Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
+                                    padding:  EdgeInsets.only(right: 8.0.w),
                                     child: Container(
-                                      height: 25,
-                                      width: 25,
+                                      height: 25.h,
+                                      width: 25.w,
                                       decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(4),
+                                        borderRadius: BorderRadius.circular(4.r),
                                         color: const Color(0xff008B8B).withOpacity(0.2),
                                       ),
                                       child: Image.asset('assets/home.png'),
@@ -389,13 +393,15 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                                   ),
                                 ],
                               ),
-                              Divider(
-                                color: Colors.grey.withOpacity(0.2),
-                                thickness: 1,
+                              DottedLine(
+                                dashLength: 3.0,
+                                dashGapLength: 5.0,
+                                lineThickness: 1.0,
+                                dashColor: Colors.grey.withOpacity(0.4),
                               ),
-                              const SizedBox(height: 10),
+                               SizedBox(height: 10.h),
                               Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                                padding:  EdgeInsets.symmetric(horizontal: 6.0.w),
                                 child: SlideAction(
                                   enabled: !_isFetchingAddress &&
                                       !(_checkInTime != null && _checkOutTime != null),
@@ -403,22 +409,22 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                                   innerColor: Colors.white,
                                   elevation: 2,
                                   borderRadius: 6,
-                                  height: 62,
+                                  height: 62.h,
                                   sliderButtonIcon: Icon(
                                     Icons.horizontal_distribute_rounded,
                                     color: _isCheckedIn ? Colors.red : const Color(0xff008B8B),
                                   ),
                                   text: _isCheckedIn ? 'Swipe to Check Out' : 'Swipe to Check In',
-                                  textStyle: const TextStyle(
+                                  textStyle:  TextStyle(
                                     color: Colors.white,
-                                    fontSize: 18,
+                                    fontSize: 18.sp,
                                     fontWeight: FontWeight.w500,
                                   ),
                                   onSubmit: () async {
                                     final now = DateTime.now();
 
                                     if (!_isCheckedIn) {
-                                      // This block runs on Check-In swipe
+
 
                                       setState(() {
                                         _checkInTime = now;
@@ -436,10 +442,18 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                                         hoursWorked: 0,
                                       );
 
+                                      final locationInAndOutModel = LocationInAndOutModel(
+                                        employeeId: employeeId ?? "",
+                                        latitude: 24.0000,
+                                        longitude: 87.00000,
+                                      );
                                       print(jsonEncode(attendance));
-                                      // Dispatch BLoC event
+
                                       context.read<AttendanceBloc>().add(
                                         MarkAttendanceEvent(attendanceModel: attendance),
+                                      );
+                                      context.read<AttendanceBloc>().add(
+                                        CheckInEvent(locationInAndOutModel: locationInAndOutModel),
                                       );
                                     } else {
 
@@ -449,13 +463,35 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
                                         _isCheckedIn = false;
                                       });
 
-                                      // Optional: You can dispatch a CheckOut event if you have that implemented
+                                      final locationInAndOutModel = LocationInAndOutModel(
+                                        employeeId: employeeId ?? "",
+                                        latitude: 24.0000,
+                                        longitude: 87.00000,
+                                      );
+
+                                      final updateAttendance = UpdateAttendanceModel(
+                                        employeeId: employeeId ?? "",
+                                        date: now,
+                                        status: _attendanceStatus,
+                                        timeOut: now,
+                                        locationOutId: _currentAddress.toString(),
+                                        hoursWorked: 0,
+                                      );
+
+                                      context.read<AttendanceBloc>().add(
+                                        CheckOutEvent(locationInAndOutModel: locationInAndOutModel),
+                                      );
+                                      context.read<AttendanceBloc>().add(
+                                        UpdateAttendanceEvent(updateAttendanceModel: updateAttendance),
+                                      );
+
+
                                     }
                                   },
                                 )
 
                               ),
-                              const SizedBox(height: 8),
+                               SizedBox(height: 8.h),
                             ],
                           ),
                         ),
@@ -468,59 +504,59 @@ class _HomeScreenUiState extends State<HomeScreenUi> {
             ),
           ],
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: const Color(0xff008B8B),
-          currentIndex: _selectedIndex,
-          onTap: _onItemTapped,
-          showUnselectedLabels: true,
-          type: BottomNavigationBarType.fixed,
-
-          selectedItemColor: Colors.white,
-          unselectedItemColor: Colors.white,
-
-          selectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 10),
-          unselectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 10),
-
-          selectedIconTheme: const IconThemeData(color: Colors.white),
-          unselectedIconTheme: const IconThemeData(color: Colors.white),
-
-          items: [
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                _selectedIndex == 0
-                    ? 'assets/home_selected.png'
-                    : 'assets/home_unselected.png',
-                width: 24,
-                height: 24,
-              ),
-              label: 'Home',
-            ),
-
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                _selectedIndex == 1
-                    ? 'assets/calendar_selected.png'
-                    : 'assets/calendar_unselected.png',
-                width: 24,
-                height: 24,
-              ),
-              label: 'Attendance',
-            ),
-
-            BottomNavigationBarItem(
-              icon: Image.asset(
-                _selectedIndex == 1
-                    ? 'assets/profile_selected.png'
-                    : 'assets/profile_unselected.png',
-                width: 24,
-                height: 24,
-              ),
-              label: 'Profile',
-            ),
-
-            BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
-          ],
-        ),
+        // bottomNavigationBar: BottomNavigationBar(
+        //   backgroundColor: const Color(0xff008B8B),
+        //   currentIndex: _selectedIndex,
+        //   onTap: _onItemTapped,
+        //   showUnselectedLabels: true,
+        //   type: BottomNavigationBarType.fixed,
+        //
+        //   selectedItemColor: Colors.white,
+        //   unselectedItemColor: Colors.white,
+        //
+        //   selectedLabelStyle:  TextStyle(color: Colors.white, fontSize: 10.sp),
+        //   unselectedLabelStyle:  TextStyle(color: Colors.white, fontSize: 10.sp),
+        //
+        //   selectedIconTheme: const IconThemeData(color: Colors.white),
+        //   unselectedIconTheme: const IconThemeData(color: Colors.white),
+        //
+        //   items: [
+        //     BottomNavigationBarItem(
+        //       icon: Image.asset(
+        //         _selectedIndex == 0
+        //             ? 'assets/home_selected.png'
+        //             : 'assets/home_unselected.png',
+        //         width: 24.w,
+        //         height: 24.h,
+        //       ),
+        //       label: 'Home',
+        //     ),
+        //
+        //     BottomNavigationBarItem(
+        //       icon: Image.asset(
+        //         _selectedIndex == 1
+        //             ? 'assets/calendar_selected.png'
+        //             : 'assets/calendar_unselected.png',
+        //         width: 24.w,
+        //         height: 24.h,
+        //       ),
+        //       label: 'Attendance',
+        //     ),
+        //
+        //     BottomNavigationBarItem(
+        //       icon: Image.asset(
+        //         _selectedIndex == 1
+        //             ? 'assets/profile_selected.png'
+        //             : 'assets/profile_unselected.png',
+        //         width: 24.w,
+        //         height: 24.h,
+        //       ),
+        //       label: 'Profile',
+        //     ),
+        //
+        //     BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
+        //   ],
+        // ),
 
       );
   }

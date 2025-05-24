@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InputField extends StatelessWidget {
   final String title;
@@ -19,34 +20,34 @@ class InputField extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 14,
+          style:  TextStyle(
+            fontSize: 14.sp,
             fontWeight: FontWeight.w500,
             color: Colors.grey,
           ),
         ),
-        const SizedBox(height: 8),
+         SizedBox(height: 8.h),
         TextField(
           controller: textEditingControllerValue,
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
             isDense: true,
-            contentPadding: const EdgeInsets.symmetric(
-              vertical: 16,
-              horizontal: 16, // Ensures left padding for both hint and input text
+            contentPadding:  EdgeInsets.symmetric(
+              vertical: 16.w,
+              horizontal: 16.w,
             ),
             hintText: hintText,
-            hintStyle: const TextStyle(
-              fontSize: 14,
+            hintStyle:  TextStyle(
+              fontSize: 14.sp,
               fontWeight: FontWeight.w500,
-              color: Colors.grey,
+              color: Colors.black,
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               borderSide: const BorderSide(color: Color(0xff008B8B)),
             ),
           ),

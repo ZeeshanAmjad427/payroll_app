@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PasswordInputField extends StatelessWidget {
   final bool obscurePassword;
@@ -17,25 +18,25 @@ class PasswordInputField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+         Text(
           'Password',
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 14.sp,
             fontWeight: FontWeight.w500,
             color: Colors.grey,
           ),
         ),
-        const SizedBox(height: 8),
+         SizedBox(height: 8.h),
         TextField(
           obscureText: obscurePassword,
           decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(12.r),
               borderSide: BorderSide(color: Colors.grey.shade300),
             ),
             hintText: 'Enter your password',
-            hintStyle: const TextStyle(
-              fontSize: 14,
+            hintStyle:  TextStyle(
+              fontSize: 14.sp,
               fontWeight: FontWeight.w500,
             ),
             suffixIcon: IconButton(
@@ -44,7 +45,7 @@ class PasswordInputField extends StatelessWidget {
                     ? Icons.visibility_off_outlined
                     : Icons.visibility_outlined,
                 color: Colors.grey,
-                size: 20,
+                size: 20.r,
               ),
               onPressed: onToggleVisibility,
             ),

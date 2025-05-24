@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InfoContainer extends StatelessWidget {
   final Widget icon;
@@ -17,11 +18,11 @@ class InfoContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width * 0.40,
-      margin: const EdgeInsets.symmetric(horizontal: 8),
+      width: MediaQuery.of(context).size.width * 0.40.w,
+      margin:  EdgeInsets.symmetric(horizontal: 8.w),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.3),
@@ -31,29 +32,29 @@ class InfoContainer extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding:  EdgeInsets.all(16.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Container(
-                  height: 30,
-                  width: 30,
-                  padding: const EdgeInsets.all(2),
+                  height: 30.h,
+                  width: 30.w,
+                  padding:  EdgeInsets.all(2.w),
                   decoration: BoxDecoration(
                     color: const Color(0xff008B8B).withOpacity(0.2),
                     shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(4)
+                    borderRadius: BorderRadius.circular(4.r)
                   ),
                   child: icon,
                 ),
-                const SizedBox(width: 8),
+                 SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
                     title,
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style:  TextStyle(
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.normal,
                       color: Colors.black,
                     ),
@@ -62,16 +63,16 @@ class InfoContainer extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 6),
+             SizedBox(height: 6.h),
             Text(
               data,
-              style: const TextStyle(fontSize: 20,
+              style:  TextStyle(fontSize: 20.sp,
                   color: Color(0xff008B8B)),
             ),
-            const SizedBox(height: 6),
+             SizedBox(height: 6.h),
             Text(
               text,
-              style: const TextStyle(fontSize: 16),
+              style:  TextStyle(fontSize: 16.sp),
             ),
           ],
         ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class InputFiledComponent extends StatelessWidget {
   final String label;
@@ -32,8 +33,8 @@ class InputFiledComponent extends StatelessWidget {
           children: [
             Text(
               label,
-              style: const TextStyle(
-                fontSize: 14,
+              style:  TextStyle(
+                fontSize: 14.sp,
                 fontWeight: FontWeight.w600,
                 color: Color(0xff008B8B),
               ),
@@ -43,8 +44,8 @@ class InputFiledComponent extends StatelessWidget {
                 onTap: onTrailingTap,
                 child: Text(
                   trailingText!,
-                  style: const TextStyle(
-                    fontSize: 12,
+                  style:  TextStyle(
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w400,
                     color: Colors.black,
                     decoration: TextDecoration.underline,
@@ -53,7 +54,7 @@ class InputFiledComponent extends StatelessWidget {
               ),
           ],
         ),
-        const SizedBox(height: 8),
+         SizedBox(height: 8.h),
         TextFormField(
           controller: controller,
           keyboardType: keyboardType,
@@ -65,23 +66,23 @@ class InputFiledComponent extends StatelessWidget {
           },
           decoration: InputDecoration(
             hintText: hintText,
-            contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+            contentPadding:  EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.r),
               borderSide: BorderSide(
                 color: Colors.grey.withOpacity(0.2),
                 width: 1.0,
               ),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.r),
               borderSide: BorderSide(
                 color: const Color(0xff008B8B).withOpacity(0.6),
                 width: 1.2,
               ),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(8.r),
               borderSide: BorderSide(
                 color: Colors.grey.withOpacity(0.4),
                 width: 1.0,
@@ -89,7 +90,7 @@ class InputFiledComponent extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 16),
+         SizedBox(height: 16.h),
       ],
     );
   }

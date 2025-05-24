@@ -1,6 +1,11 @@
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:payroll/core/utils/header_util.dart';
 import 'package:payroll/presentation/screens/home_screen/home_screen_ui/widgets/top_left_gradient_color.dart';
+import 'package:payroll/presentation/screens/login_screen/login_screen_ui/login_screen_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../attendance_log_screen/attendance_log_screen_ui.dart';
 import '../home_screen/home_screen_ui/home_screen_ui.dart';
@@ -50,60 +55,45 @@ class _SettingsScreenUiState extends State<SettingsScreenUi> {
             painter: TopLeftGradientPainter(),
             child: Container(),
           ),
+          HeaderUtil(title: "Settings"),
           Positioned(
-            top: 60,
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const Spacer(),
-                  const Text(
-                    'Settings',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const Spacer(flex: 2),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.15,
+            top: MediaQuery.of(context).size.height * 0.15.h,
             left: 0,
             right: 0,
             bottom: 0,
             child: Card(
               color: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
               elevation: 4,
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding:  EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // App Settings
                     Row(
-                      children: const [
-                        Icon(Icons.settings, color: Color(0xff008B8B), size: 18),
-                        SizedBox(width: 8),
+                      children:  [
+                        Icon(Icons.settings, color: Color(0xff008B8B), size: 18.r),
+                        SizedBox(width: 8.w),
                         Text(
                           'App Settings',
-                          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
                         ),
                       ],
                     ),
-                    const Divider(height: 20),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 2.w,vertical: 4.h,),
+                      child: DottedLine(
+                        dashLength: 3.0,
+                        dashGapLength: 5.0,
+                        lineThickness: 1.0,
+                        dashColor: Colors.grey.withOpacity(0.4),
+                      ),
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Dark Mode',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400),),
+                         Text('Dark Mode',style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.w400),),
                         CupertinoSwitch(
                           value: isDarkMode,
                           activeTrackColor: Color(0xff008B8B),
@@ -113,13 +103,13 @@ class _SettingsScreenUiState extends State<SettingsScreenUi> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12),
-                    const Text('App Language',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400)),
-                    const SizedBox(height: 12),
+                     SizedBox(height: 12.h),
+                     Text('App Language',style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.w400)),
+                     SizedBox(height: 12.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text('Check-In Reminder',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400)),
+                         Text('Check-In Reminder',style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.w400)),
                         CupertinoSwitch(
                           value: isCheckInReminder,
                           activeTrackColor: Color(0xff008B8B),
@@ -129,37 +119,47 @@ class _SettingsScreenUiState extends State<SettingsScreenUi> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                     SizedBox(height: 16.h),
                     // Help & Terms
                     Row(
-                      children: const [
-                        Icon(Icons.verified_user, color: Color(0xff008B8B), size: 18),
-                        SizedBox(width: 8),
+                      children:  [
+                        Icon(Icons.verified_user, color: Color(0xff008B8B), size: 18.r),
+                        SizedBox(width: 8.w),
                         Text(
                           'Help & Terms of Use',
-                          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                          style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16.sp),
                         ),
                       ],
                     ),
-                    const Divider(height: 20),
-                    const Text('Privacy Policy',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400)),
-                    const SizedBox(height: 12),
-                    const Text('Terms of User',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w400)),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 2.w,vertical: 6.h,),
+                      child: DottedLine(
+                        dashLength: 3.0,
+                        dashGapLength: 5.0,
+                        lineThickness: 1.0,
+                        dashColor: Colors.grey.withOpacity(0.4),
+                      ),
+                    ),
+                     Text('Privacy Policy',style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.w400)),
+                     SizedBox(height: 12.h),
+                     Text('Terms of User',style: TextStyle(fontSize: 14.sp,fontWeight: FontWeight.w400)),
                     const Spacer(),
                     // Logout Button
                     SizedBox(
                       width: double.infinity,
                       child: ElevatedButton.icon(
-                        onPressed: () {
-                          // Logout logic here
+                        onPressed: () async{
+                          final prefs = await SharedPreferences.getInstance();
+                          prefs.clear();
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> LoginScreenUi()));
                         },
                         icon: const Icon(Icons.logout, color: Colors.white),
-                        label: const Text('Log Out', style: TextStyle(color: Colors.white)),
+                        label:  Text('Log Out', style: TextStyle(fontSize:14.sp,color: Colors.white)),
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
+                          padding:  EdgeInsets.symmetric(vertical: 14.h),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(8.r),
                           ),
                         ),
                       ),
@@ -171,59 +171,59 @@ class _SettingsScreenUiState extends State<SettingsScreenUi> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xff008B8B),
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-
-        selectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 10),
-        unselectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 10),
-
-        selectedIconTheme: const IconThemeData(color: Colors.white),
-        unselectedIconTheme: const IconThemeData(color: Colors.white),
-
-        items: [
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              _selectedIndex == 1
-                  ? 'assets/home_selected.png'
-                  : 'assets/home_unselected.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Home',
-          ),
-
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              _selectedIndex == 1
-                  ? 'assets/calendar_selected.png'
-                  : 'assets/calendar_unselected.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Attendance',
-          ),
-
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              _selectedIndex == 1
-                  ? 'assets/profile_selected.png'
-                  : 'assets/profile_unselected.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Profile',
-          ),
-
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: const Color(0xff008B8B),
+      //   currentIndex: _selectedIndex,
+      //   onTap: _onItemTapped,
+      //   showUnselectedLabels: true,
+      //   type: BottomNavigationBarType.fixed,
+      //
+      //   selectedItemColor: Colors.white,
+      //   unselectedItemColor: Colors.white,
+      //
+      //   selectedLabelStyle:  TextStyle(color: Colors.white, fontSize: 10.sp),
+      //   unselectedLabelStyle:  TextStyle(color: Colors.white, fontSize: 10.sp),
+      //
+      //   selectedIconTheme: const IconThemeData(color: Colors.white),
+      //   unselectedIconTheme: const IconThemeData(color: Colors.white),
+      //
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       icon: Image.asset(
+      //         _selectedIndex == 1
+      //             ? 'assets/home_selected.png'
+      //             : 'assets/home_unselected.png',
+      //         width: 24,
+      //         height: 24,
+      //       ),
+      //       label: 'Home',
+      //     ),
+      //
+      //     BottomNavigationBarItem(
+      //       icon: Image.asset(
+      //         _selectedIndex == 1
+      //             ? 'assets/calendar_selected.png'
+      //             : 'assets/calendar_unselected.png',
+      //         width: 24,
+      //         height: 24,
+      //       ),
+      //       label: 'Attendance',
+      //     ),
+      //
+      //     BottomNavigationBarItem(
+      //       icon: Image.asset(
+      //         _selectedIndex == 1
+      //             ? 'assets/profile_selected.png'
+      //             : 'assets/profile_unselected.png',
+      //         width: 24,
+      //         height: 24,
+      //       ),
+      //       label: 'Profile',
+      //     ),
+      //
+      //     BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
+      //   ],
+      // ),
 
     );
   }

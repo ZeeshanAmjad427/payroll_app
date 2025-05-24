@@ -1,4 +1,6 @@
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 
 class AttendanceCardComponent extends StatelessWidget {
@@ -59,15 +61,15 @@ class AttendanceCardComponent extends StatelessWidget {
     switch (device.toLowerCase()) {
       case 'mobile':
         return Container(
-          height: 25,
-            width: 25,
+          height: 25.h,
+            width: 25.w,
             decoration: BoxDecoration(
               color: Color(0xff008B8B).withOpacity(0.2),
-              borderRadius: BorderRadius.circular(4)
+              borderRadius: BorderRadius.circular(4.r)
             ),
-            child: const Icon(Icons.smartphone_rounded, size: 16, color: Color(0xff008B8B)));
+            child:  Icon(Icons.smartphone_rounded, size: 16.r, color: Color(0xff008B8B)));
       case 'laptop':
-        return const Icon(Icons.laptop, size: 16, color: Color(0xff008B8B));
+        return  Icon(Icons.laptop, size: 16.r, color: Color(0xff008B8B));
       default:
         return const SizedBox.shrink();
     }
@@ -80,53 +82,53 @@ class AttendanceCardComponent extends StatelessWidget {
       elevation: 3,
       shadowColor: Colors.grey.shade200,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12.r),
       ),
-      margin: const EdgeInsets.symmetric(vertical: 8),
+      margin:  EdgeInsets.symmetric(vertical: 8.h),
       child: Padding(
-        padding: const EdgeInsets.all(10),
+        padding:  EdgeInsets.all(10.w),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
               children: [
                 Container(
-                  height: 25,
-                  width: 25,
+                  height: 25.h,
+                  width: 25.w,
                   decoration: BoxDecoration(
                     color: const Color(0xff008B8B).withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.circular(4.r),
                   ),
-                  child: const Icon(Icons.calendar_today,
-                      size: 20, color: Color(0xff008B8B)),
+                  child:  Icon(Icons.calendar_today,
+                      size: 20.r, color: Color(0xff008B8B)),
                 ),
-                const SizedBox(width: 8),
+                 SizedBox(width: 8.w),
                 Expanded(
                   child: Text(
                     DateFormat('MMM dd, yyyy').format(date),
-                    style: const TextStyle(
-                      fontSize: 16,
+                    style:  TextStyle(
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                 ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                  padding:  EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
                   decoration: BoxDecoration(
                     color: _statusBackgroundColor(status),
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.circular(6.r),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       if (status.toLowerCase() == 'weekend') ...[
-                        const Icon(Icons.beach_access, size: 14, color: Color(0xffFF8C00)),
-                        const SizedBox(width: 4),
+                         Icon(Icons.beach_access, size: 14.r, color: Color(0xffFF8C00)),
+                         SizedBox(width: 4.w),
                       ],
                       Text(
                         status,
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 12.sp,
                           color: _statusTextColor(status),
                           fontWeight: FontWeight.w600,
                         ),
@@ -136,91 +138,99 @@ class AttendanceCardComponent extends StatelessWidget {
                 ),
               ],
             ),
-            Divider(color: Colors.grey.shade200),
-            const SizedBox(height: 12),
+            Padding(
+              padding:  EdgeInsets.symmetric(horizontal: 2.w,vertical: 5.h),
+              child: DottedLine(
+                dashLength: 3.0,
+                dashGapLength: 5.0,
+                lineThickness: 1.0,
+                dashColor: Colors.grey.withOpacity(0.4),
+              ),
+            ),
+             SizedBox(height: 12.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
                     _deviceIcon(checkInDevice),
-                    const SizedBox(width: 6),
-                    const Text('Check-In', style: TextStyle(fontSize: 14)),
+                     SizedBox(width: 6.w),
+                     Text('Check-In', style: TextStyle(fontSize: 14.sp)),
                   ],
                 ),
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                      padding:  EdgeInsets.symmetric(
+                          horizontal: 10.w, vertical: 4.h),
                       decoration: BoxDecoration(
                         color: Colors.red.shade100,
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(6.r),
                       ),
                       child: Text(
                         checkInNote,
-                        style: const TextStyle(
-                          fontSize: 12,
+                        style:  TextStyle(
+                          fontSize: 12.sp,
                           color: Colors.red,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Text(checkInTime, style: const TextStyle(fontSize: 14)),
+                     SizedBox(width: 8.w),
+                    Text(checkInTime, style:  TextStyle(fontSize: 14.sp)),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+             SizedBox(height: 8.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Row(
                   children: [
                     _deviceIcon(checkOutDevice),
-                    const SizedBox(width: 6),
-                    const Text('Check-Out', style: TextStyle(fontSize: 14)),
+                     SizedBox(width: 6.w),
+                     Text('Check-Out', style: TextStyle(fontSize: 14.sp)),
                   ],
                 ),
                 Row(
                   children: [
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                      padding:  EdgeInsets.symmetric(
+                          horizontal: 10.w, vertical: 4.h),
                       decoration: BoxDecoration(
                         color: const Color(0xff008B8B).withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(6),
+                        borderRadius: BorderRadius.circular(6.r),
                       ),
                       child: Text(
                         checkOutNote,
-                        style: const TextStyle(
-                          fontSize: 12,
+                        style:  TextStyle(
+                          fontSize: 12.sp,
                           color: Color(0xff008B8B),
                           fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Text(checkOutTime, style: const TextStyle(fontSize: 14)),
+                     SizedBox(width: 8.w),
+                    Text(checkOutTime, style: TextStyle(fontSize: 14.sp)),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+             SizedBox(height: 8.h),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Row(
+                 Row(
                   children: [
-                    SizedBox(width: 8),
-                    Text('Total Working Hours', style: TextStyle(fontSize: 14)),
+                    SizedBox(width: 8.w),
+                    Text('Total Working Hours', style: TextStyle(fontSize: 14.sp)),
                   ],
                 ),
                 Text(
                   totalHours,
-                  style: const TextStyle(
-                    fontSize: 14,
+                  style:  TextStyle(
+                    fontSize: 14.sp,
                     color: Color(0xff008B8B),
                   ),
                 ),

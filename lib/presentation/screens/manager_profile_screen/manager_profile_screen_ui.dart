@@ -1,5 +1,8 @@
+import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:payroll/core/utils/header_util.dart';
 import 'package:payroll/presentation/screens/home_screen/home_screen_ui/widgets/top_left_gradient_color.dart';
 import 'package:payroll/presentation/screens/profile_screen/widgets/input_filed_component.dart';
 import 'package:payroll/presentation/screens/settings_screen/settings_screen_ui.dart';
@@ -55,34 +58,9 @@ class _ManagerProfileScreenUiState extends State<ManagerProfileScreenUi> {
             painter: TopLeftGradientPainter(),
             child: Container(),
           ),
+          HeaderUtil(title: "Manager Profile"),
           Positioned(
-            top: 60,
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const Expanded(
-                    child: Center(
-                      child: Text(
-                        'Manager Profile',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.15,
+            top: MediaQuery.of(context).size.height * 0.15.h,
             left: 0,
             right: 0,
             bottom: 0,
@@ -91,21 +69,21 @@ class _ManagerProfileScreenUiState extends State<ManagerProfileScreenUi> {
               shadowColor: Colors.black.withOpacity(0.1),
               elevation: 5,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
               ),
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+                padding:  EdgeInsets.all(16.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 16),
+                     SizedBox(height: 16.h),
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Stack(
                           children: [
                             Container(
-                              padding: const EdgeInsets.all(0),
+                              padding:  EdgeInsets.all(0.w),
                               decoration: BoxDecoration(
                                 shape: BoxShape.circle,
                                 border: Border.all(
@@ -113,45 +91,45 @@ class _ManagerProfileScreenUiState extends State<ManagerProfileScreenUi> {
                                   width: 3.0,
                                 ),
                               ),
-                              child: const CircleAvatar(
-                                radius: 40,
+                              child:  CircleAvatar(
+                                radius: 40.r,
                                 backgroundImage: AssetImage('assets/profile.jpg'),
                               ),
                             ),
                             Positioned(
-                              bottom: 4,
+                              bottom: 4.h,
                               right: 0,
                               child: Container(
                                 decoration: const BoxDecoration(
                                   color: Color(0xff008B8B),
                                   shape: BoxShape.circle,
                                 ),
-                                padding: const EdgeInsets.all(4),
-                                child: const Icon(
+                                padding:  EdgeInsets.all(4.w),
+                                child:  Icon(
                                   Icons.edit,
-                                  size: 16,
+                                  size: 16.r,
                                   color: Colors.white,
                                 ),
                               ),
                             ),
                           ],
                         ),
-                        const SizedBox(width: 16),
+                         SizedBox(width: 16.w),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children:  [
                             Text(
-                              'Shayan Shinwari',
+                              'Shayan Sherwani',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            SizedBox(height: 4),
+                            SizedBox(height: 4.h),
                             Text(
                               'Senior Project Manager',
                               style: TextStyle(
-                                fontSize: 12,
+                                fontSize: 12.sp,
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -159,17 +137,25 @@ class _ManagerProfileScreenUiState extends State<ManagerProfileScreenUi> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                     SizedBox(height: 24.h),
 
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                     Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0.w),
                       child: Text(
                         'Personal Info',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Divider(color: Colors.grey.withOpacity(0.2)),
+                     SizedBox(height: 4.h),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 2.w,vertical: 4.h,),
+                      child: DottedLine(
+                        dashLength: 3.0,
+                        dashGapLength: 5.0,
+                        lineThickness: 1.0,
+                        dashColor: Colors.grey.withOpacity(0.4),
+                      ),
+                    ),
 
                     InputFiledComponent(
                       label: 'Employee ID',
@@ -189,16 +175,24 @@ class _ManagerProfileScreenUiState extends State<ManagerProfileScreenUi> {
                       hintText: '+923211231231',
                     ),
 
-                    const SizedBox(height: 4),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                     SizedBox(height: 4.h),
+                     Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 10.0.w),
                       child: Text(
                         'Organization Info',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Divider(color: Colors.grey.withOpacity(0.2)),
+                    SizedBox(height: 4.h),
+                    Padding(
+                      padding:  EdgeInsets.symmetric(horizontal: 2.w,vertical: 4.h,),
+                      child: DottedLine(
+                        dashLength: 3.0,
+                        dashGapLength: 5.0,
+                        lineThickness: 1.0,
+                        dashColor: Colors.grey.withOpacity(0.4),
+                      ),
+                    ),
 
                     InputFiledComponent(
                       label: 'Organization',
@@ -226,59 +220,59 @@ class _ManagerProfileScreenUiState extends State<ManagerProfileScreenUi> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xff008B8B),
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-
-        selectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 10),
-        unselectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 10),
-
-        selectedIconTheme: const IconThemeData(color: Colors.white),
-        unselectedIconTheme: const IconThemeData(color: Colors.white),
-
-        items: [
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              _selectedIndex == 0
-                  ? 'assets/home_selected.png'
-                  : 'assets/home_unselected.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Home',
-          ),
-
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              _selectedIndex == 1
-                  ? 'assets/calendar_selected.png'
-                  : 'assets/calendar_unselected.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Attendance',
-          ),
-
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              _selectedIndex == 1
-                  ? 'assets/profile_selected.png'
-                  : 'assets/profile_unselected.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Profile',
-          ),
-
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: const Color(0xff008B8B),
+      //   currentIndex: _selectedIndex,
+      //   onTap: _onItemTapped,
+      //   showUnselectedLabels: true,
+      //   type: BottomNavigationBarType.fixed,
+      //
+      //   selectedItemColor: Colors.white,
+      //   unselectedItemColor: Colors.white,
+      //
+      //   selectedLabelStyle:  TextStyle(color: Colors.white, fontSize: 10.sp),
+      //   unselectedLabelStyle:  TextStyle(color: Colors.white, fontSize: 10.sp),
+      //
+      //   selectedIconTheme: const IconThemeData(color: Colors.white),
+      //   unselectedIconTheme: const IconThemeData(color: Colors.white),
+      //
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       icon: Image.asset(
+      //         _selectedIndex == 0
+      //             ? 'assets/home_selected.png'
+      //             : 'assets/home_unselected.png',
+      //         width: 24,
+      //         height: 24,
+      //       ),
+      //       label: 'Home',
+      //     ),
+      //
+      //     BottomNavigationBarItem(
+      //       icon: Image.asset(
+      //         _selectedIndex == 1
+      //             ? 'assets/calendar_selected.png'
+      //             : 'assets/calendar_unselected.png',
+      //         width: 24,
+      //         height: 24,
+      //       ),
+      //       label: 'Attendance',
+      //     ),
+      //
+      //     BottomNavigationBarItem(
+      //       icon: Image.asset(
+      //         _selectedIndex == 1
+      //             ? 'assets/profile_selected.png'
+      //             : 'assets/profile_unselected.png',
+      //         width: 24,
+      //         height: 24,
+      //       ),
+      //       label: 'Profile',
+      //     ),
+      //
+      //     BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
+      //   ],
+      // ),
     );
   }
 }

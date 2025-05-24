@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:payroll/services/token_manager.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../domain/repositories/auth_repository.dart';
 import 'login_event.dart';
 import 'login_state.dart';
@@ -26,10 +27,14 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
 
       if (response.statusCode == 200 && response.isRequestSuccess) {
+        final prefs = await SharedPreferences.getInstance();
+        if(!response.data!.isTotp){
+          await prefs.setBool('isLoggedIn', true);
+        }
         TokenManager.saveTokens(
             accessToken: response.data?.token ?? "",
             refreshToken: response.data?.refreshToken ?? "",
-            employeeId: response.data?.roleAndActions[0].id ?? "",
+            employeeId: response.data?.userId ?? "",
             isTotp: response.data?.isTotp,
             secretKey: response.data?.secretKey,
         );
@@ -40,6 +45,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           isLoading: false,
           loginStatus: LoginStatus.success,
           message: response.message,
+          secretKey: response.data?.secretKey ?? "",
+          isTotp: response.data?.isTotp ?? false
         ));
       } else {
         emit(state.copyWith(

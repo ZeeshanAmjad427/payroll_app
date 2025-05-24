@@ -1,7 +1,10 @@
+import 'package:dotted_line/dotted_line.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
+import 'package:payroll/core/utils/header_util.dart';
 import 'package:payroll/presentation/screens/attendance_log_screen/widgets/attendance_card/attendance_card_component.dart';
 import 'package:payroll/presentation/screens/home_screen/home_screen_ui/widgets/top_left_gradient_color.dart';
 
@@ -133,34 +136,9 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
             painter: TopLeftGradientPainter(),
             child: Container(),
           ),
+          HeaderUtil(title: "My Attendance"),
           Positioned(
-            top: 60,
-            left: 0,
-            right: 20,
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back_ios),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  const Expanded(
-                    child: Center(
-                      child: Text(
-                        'My Attendance',
-                        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: MediaQuery.of(context).size.height * 0.15,
+            top: MediaQuery.of(context).size.height * 0.15.h,
             left: 0,
             right: 0,
             bottom: 0,
@@ -169,32 +147,32 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
               shadowColor: Colors.black.withOpacity(0.1),
               elevation: 5,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(16.r),
               ),
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
+                padding:  EdgeInsets.all(16.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    
+
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                             Text(
                               'Attendance Log',
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 16.sp,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(height: 4),
+                             SizedBox(height: 4.h),
                             Text(
                               weekText,
-                              style: const TextStyle(
-                                fontSize: 14,
+                              style:  TextStyle(
+                                fontSize: 14.sp,
                                 fontWeight: FontWeight.w500,
                                 color: Color(0xff008B8B),
                               ),
@@ -208,44 +186,44 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                               color: Colors.grey.shade300,
                               width: 1,
                             ),
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.circular(16.r),
                           ),
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          padding:  EdgeInsets.symmetric(horizontal: 12.w),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton2<String>(
                               isExpanded: true,
-                              hint: const Text(
+                              hint:  Text(
                                 'Select Month',
-                                style: TextStyle(fontSize: 14),
+                                style: TextStyle(fontSize: 14.sp),
                               ),
                               items: _months.map((month) {
                                 return DropdownMenuItem<String>(
                                   value: month,
                                   child: Text(
                                     month,
-                                    style: const TextStyle(
-                                      fontSize: 14,
+                                    style:  TextStyle(
+                                      fontSize: 14.sp,
                                     ),
                                   ),
                                 );
                               }).toList(),
                               value: _selectedMonth,
                               onChanged: _onMonthChanged,
-                              buttonStyleData: const ButtonStyleData(
-                                padding: EdgeInsets.symmetric(horizontal: 0),
-                                height: 40,
-                                width: 140,
+                              buttonStyleData:  ButtonStyleData(
+                                padding: EdgeInsets.symmetric(horizontal: 0.w),
+                                height: 40.h,
+                                width: 140.w,
                               ),
                               dropdownStyleData: DropdownStyleData(
-                                maxHeight: 200, // dropdown won't fully open and will scroll
+                                maxHeight: 200.h, // dropdown won't fully open and will scroll
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
+                                  borderRadius: BorderRadius.circular(10.r),
                                   color: Colors.white,
                                 ),
                               ),
-                              menuItemStyleData: const MenuItemStyleData(
-                                height: 40,
-                                padding: EdgeInsets.symmetric(horizontal: 12),
+                              menuItemStyleData:  MenuItemStyleData(
+                                height: 40.h,
+                                padding: EdgeInsets.symmetric(horizontal: 12.w),
                               ),
                               iconStyleData: const IconStyleData(
                                 icon: Icon(Icons.keyboard_arrow_down, color: Colors.black),
@@ -255,9 +233,17 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                     Divider(color: Colors.grey.withOpacity(0.3), thickness: 1),
-                    const SizedBox(height: 10),
+                     SizedBox(height: 10),
+                    Padding(
+                      padding:  EdgeInsets.only(right: 8.w,left: 8.w),
+                      child: DottedLine(
+                        dashLength: 3.0,
+                        dashGapLength: 5.0,
+                        lineThickness: 1.0,
+                        dashColor: Colors.grey.withOpacity(0.4),
+                      ),
+                    ),
+                     SizedBox(height: 10.h),
 
                     // Attendance cards for the week
                     for (var date in weekDates)
@@ -275,14 +261,14 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                         AttendanceCardComponent(date: date),
 
                     Padding(
-                      padding: const EdgeInsets.all(8.0),
+                      padding:  EdgeInsets.all(8.0.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             weekInfoText,
                             style: TextStyle(
-                              fontSize: 14,
+                              fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
                               color: Colors.grey.shade600,
                             ),
@@ -293,9 +279,9 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                                 onPressed: _onPrevWeek,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.grey.shade200,
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  padding:  EdgeInsets.symmetric(horizontal: 12.w),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(8.r),
                                   ),
                                 ),
                                 child: const Text(
@@ -303,14 +289,14 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
                                   style: TextStyle(color: Colors.black),
                                 ),
                               ),
-                              const SizedBox(width: 8),
+                               SizedBox(width: 8.w),
                               ElevatedButton(
                                 onPressed: _onNextWeek,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.white,
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  padding:  EdgeInsets.symmetric(horizontal: 12.w),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
+                                    borderRadius: BorderRadius.circular(8.r),
                                   ),
                                 ),
                                 child: const Text(
@@ -330,59 +316,59 @@ class _AttendanceLogScreenUiState extends State<AttendanceLogScreenUi> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xff008B8B),
-        currentIndex: _selectedIndex,
-        onTap: _onItemTapped,
-        showUnselectedLabels: true,
-        type: BottomNavigationBarType.fixed,
-
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Colors.white,
-
-        selectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 10),
-        unselectedLabelStyle: const TextStyle(color: Colors.white, fontSize: 10),
-
-        selectedIconTheme: const IconThemeData(color: Colors.white),
-        unselectedIconTheme: const IconThemeData(color: Colors.white),
-
-        items: [
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              _selectedIndex == 0
-                  ? 'assets/home_selected.png'
-                  : 'assets/home_unselected.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Home',
-          ),
-
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              _selectedIndex == 1
-                  ? 'assets/calendar_selected.png'
-                  : 'assets/calendar_unselected.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Attendance',
-          ),
-
-          BottomNavigationBarItem(
-            icon: Image.asset(
-              _selectedIndex == 0
-                  ? 'assets/profile_selected.png'
-                  : 'assets/profile_unselected.png',
-              width: 24,
-              height: 24,
-            ),
-            label: 'Profile',
-          ),
-
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
-        ],
-      ),
+      // bottomNavigationBar: BottomNavigationBar(
+      //   backgroundColor: const Color(0xff008B8B),
+      //   currentIndex: _selectedIndex,
+      //   onTap: _onItemTapped,
+      //   showUnselectedLabels: true,
+      //   type: BottomNavigationBarType.fixed,
+      //
+      //   selectedItemColor: Colors.white,
+      //   unselectedItemColor: Colors.white,
+      //
+      //   selectedLabelStyle:  TextStyle(color: Colors.white, fontSize: 10.sp),
+      //   unselectedLabelStyle:  TextStyle(color: Colors.white, fontSize: 10.sp),
+      //
+      //   selectedIconTheme: const IconThemeData(color: Colors.white),
+      //   unselectedIconTheme: const IconThemeData(color: Colors.white),
+      //
+      //   items: [
+      //     BottomNavigationBarItem(
+      //       icon: Image.asset(
+      //         _selectedIndex == 0
+      //             ? 'assets/home_selected.png'
+      //             : 'assets/home_unselected.png',
+      //         width: 24,
+      //         height: 24,
+      //       ),
+      //       label: 'Home',
+      //     ),
+      //
+      //     BottomNavigationBarItem(
+      //       icon: Image.asset(
+      //         _selectedIndex == 1
+      //             ? 'assets/calendar_selected.png'
+      //             : 'assets/calendar_unselected.png',
+      //         width: 24,
+      //         height: 24,
+      //       ),
+      //       label: 'Attendance',
+      //     ),
+      //
+      //     BottomNavigationBarItem(
+      //       icon: Image.asset(
+      //         _selectedIndex == 0
+      //             ? 'assets/profile_selected.png'
+      //             : 'assets/profile_unselected.png',
+      //         width: 24,
+      //         height: 24,
+      //       ),
+      //       label: 'Profile',
+      //     ),
+      //
+      //     BottomNavigationBarItem(icon: Icon(CupertinoIcons.square_stack_3d_up), label: 'Settings'),
+      //   ],
+      // ),
     );
   }
 }
